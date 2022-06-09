@@ -88,7 +88,7 @@ const writeFile = (
       reject();
     });
 
-    const splitter = new Splitter(startLine, endLine, notifier);
+    const splitter = new Splitter(startLine, endLine, notifier, true);
 
     const lines: string[] = [];
     lineReader.on('line', (line) => {

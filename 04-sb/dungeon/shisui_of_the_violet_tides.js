@@ -1,11 +1,12 @@
 Options.Triggers.push({
+  id: 'ShisuiOfTheVioletTides',
   zoneId: ZoneId.ShisuiOfTheVioletTides,
   timelineFile: 'shisui_of_the_violet_tides.txt',
   triggers: [
     {
       id: 'Shisui Amikiri Kamikiri Add',
       type: 'AddedCombatant',
-      netRegex: NetRegexes.addedCombatantFull({ npcNameId: '6238' }),
+      netRegex: { npcNameId: '6238' },
       alertText: (_data, matches, output) => output.kill({ name: matches.name }),
       outputStrings: {
         kill: {
@@ -21,14 +22,14 @@ Options.Triggers.push({
     {
       id: 'Shisui Amikiri Digestive Fluid',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '000E' }),
+      netRegex: { id: '000E' },
       condition: Conditions.targetIsYou(),
       response: Responses.spread(),
     },
     {
       id: 'Shisui Ruby Princess Seduce',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Ruby Princess', id: '1F7A', capture: false }),
+      netRegex: { source: 'Ruby Princess', id: '1F7A', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -37,7 +38,7 @@ Options.Triggers.push({
           fr: 'Allez dans la boîte',
           ja: '箱に入る',
           cn: '进盒子',
-          ko: '박스에 접근',
+          ko: '상자에 들어가기',
         },
       },
     },
@@ -45,7 +46,7 @@ Options.Triggers.push({
       // This is what it's called!
       id: 'Shisui Ruby Princess Geothermal Flatulence',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0001' }),
+      netRegex: { id: '0001' },
       condition: Conditions.targetIsYou(),
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -62,13 +63,13 @@ Options.Triggers.push({
     {
       id: 'Shisui Shisui Yohi Naishi-No-Kami',
       type: 'AddedCombatant',
-      netRegex: NetRegexes.addedCombatantFull({ npcNameId: '6244', capture: false }),
+      netRegex: { npcNameId: '6244', capture: false },
       response: Responses.killAdds(),
     },
     {
       id: 'Shisui Shisui Yohi Mad Stare',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Shisui Yohi', id: '1F82', capture: false }),
+      netRegex: { source: 'Shisui Yohi', id: '1F82', capture: false },
       response: Responses.lookAway(),
     },
   ],

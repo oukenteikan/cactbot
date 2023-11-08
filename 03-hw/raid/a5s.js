@@ -16,6 +16,7 @@ const bombLocation = (matches) => {
   };
 };
 Options.Triggers.push({
+  id: 'AlexanderTheFistOfTheSonSavage',
   zoneId: ZoneId.AlexanderTheFistOfTheSonSavage,
   timelineFile: 'a5s.txt',
   initData: () => {
@@ -103,13 +104,13 @@ Options.Triggers.push({
     {
       id: 'A5S Gobcut Stack',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '003E' }),
+      netRegex: { id: '003E' },
       response: Responses.stackMarkerOn(),
     },
     {
       id: 'A5S Concussion',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '3E4' }),
+      netRegex: { effectId: '3E4' },
       condition: (data, matches) => {
         if (data.me !== matches.target)
           return false;
@@ -120,7 +121,7 @@ Options.Triggers.push({
     {
       id: 'A5S Concussion BLU',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '3E4' }),
+      netRegex: { effectId: '3E4' },
       condition: (data, matches) => {
         if (data.me !== matches.target)
           return false;
@@ -131,7 +132,7 @@ Options.Triggers.push({
     {
       id: 'A5S Bomb Direction',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ source: 'Ratfinx Twinkledinks', id: '1590', capture: false }),
+      netRegex: { source: 'Ratfinx Twinkledinks', id: '1590', capture: false },
       preRun: (data) => data.bombCount++,
       // We could give directions here, but "into / opposite spikey" is pretty succinct.
       infoText: (data, _matches, output) => {
@@ -161,7 +162,7 @@ Options.Triggers.push({
     {
       id: 'A5S Boost Count',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ source: 'Ratfinx Twinkledinks', id: '16A6', capture: false }),
+      netRegex: { source: 'Ratfinx Twinkledinks', id: '16A6', capture: false },
       run: (data) => {
         data.boostCount++;
         data.boostBombs = [];
@@ -170,9 +171,9 @@ Options.Triggers.push({
     {
       id: 'A5S Bomb',
       type: 'AddedCombatant',
-      netRegex: NetRegexes.addedCombatantFull({ name: 'Bomb' }),
+      netRegex: { name: 'Bomb' },
       preRun: (data, matches) => {
-        data.boostBombs ?? (data.boostBombs = []);
+        data.boostBombs ??= [];
         data.boostBombs.push(bombLocation(matches));
       },
       alertText: (data, _matches, output) => {
@@ -233,7 +234,7 @@ Options.Triggers.push({
     {
       id: 'A5S Prey',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '001E' }),
+      netRegex: { id: '001E' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -250,9 +251,11 @@ Options.Triggers.push({
     {
       id: 'A5S Prey Healer',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '001E' }),
+      netRegex: { id: '001E' },
       condition: (data) => data.role === 'healer',
-      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.target) }),
+      infoText: (data, matches, output) => {
+        return output.text({ player: data.party.member(matches.target) });
+      },
       outputStrings: {
         text: {
           en: 'Shield ${player}',
@@ -267,7 +270,7 @@ Options.Triggers.push({
     {
       id: 'A5S Glupgloop',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0017' }),
+      netRegex: { id: '0017' },
       condition: Conditions.targetIsYou(),
       alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -284,14 +287,14 @@ Options.Triggers.push({
     {
       id: 'A5S Snake Adds',
       type: 'AddedCombatant',
-      netRegex: NetRegexes.addedCombatant({ name: 'Glassy-Eyed Cobra', capture: false }),
+      netRegex: { name: 'Glassy-Eyed Cobra', capture: false },
       suppressSeconds: 5,
       response: Responses.killAdds(),
     },
     {
       id: 'A5S Steel Scales',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Glassy-Eyed Cobra', id: '16A2' }),
+      netRegex: { source: 'Glassy-Eyed Cobra', id: '16A2' },
       condition: (data) => data.CanStun(),
       suppressSeconds: 60,
       response: Responses.stun(),
@@ -299,7 +302,7 @@ Options.Triggers.push({
     {
       id: 'A5S Anti-Coagulant Cleanse',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '3EC' }),
+      netRegex: { effectId: '3EC' },
       condition: Conditions.targetIsYou(),
       durationSeconds: 8,
       suppressSeconds: 30,
@@ -321,7 +324,7 @@ Options.Triggers.push({
       // FIXME: this is a case where the tether is part of the added combatant network data,
       // but isn't exposed as a separate tether line.  Instead, just assume the first auto
       // is going to hit the tethered person, and suppress everything else.
-      netRegex: NetRegexes.ability({ source: 'Gobbledygroper', id: '366' }),
+      netRegex: { source: 'Gobbledygroper', id: '366' },
       condition: Conditions.targetIsYou(),
       suppressSeconds: 100,
       alertText: (_data, _matches, output) => output.text(),
@@ -339,7 +342,7 @@ Options.Triggers.push({
     {
       id: 'A5S Oogle',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Gobbledygawker', id: '169C', capture: false }),
+      netRegex: { source: 'Gobbledygawker', id: '169C', capture: false },
       // These seem to come within ~2s of each other, so just have one trigger.
       suppressSeconds: 5,
       response: Responses.lookAway('alert'),

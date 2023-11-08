@@ -4,6 +4,7 @@
 // TODO: Tell people where to go for 9S divebombs
 // TODO: Tell people where to go for 9S tethered tank
 Options.Triggers.push({
+  id: 'TheCopiedFactory',
   zoneId: ZoneId.TheCopiedFactory,
   timelineFile: 'the_copied_factory.txt',
   timelineTriggers: [
@@ -51,19 +52,19 @@ Options.Triggers.push({
     {
       id: 'Copied Serial Forceful Impact',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48CF', source: 'Serial-Jointed Command Model', capture: false }),
+      netRegex: { id: '48CF', source: 'Serial-Jointed Command Model', capture: false },
       response: Responses.aoe(),
     },
     {
       id: 'Copied Serial Energy Assault',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48B5', source: 'Serial-Jointed Command Model', capture: false }),
+      netRegex: { id: '48B5', source: 'Serial-Jointed Command Model', capture: false },
       response: Responses.getBehind(),
     },
     {
       id: 'Copied Serial High-Caliber Laser',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48FA', source: 'Serial-Jointed Service Model', capture: false }),
+      netRegex: { id: '48FA', source: 'Serial-Jointed Service Model', capture: false },
       suppressSeconds: 15,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -80,39 +81,43 @@ Options.Triggers.push({
     {
       id: 'Copied Serial Clanging Blow',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48CE', source: 'Serial-Jointed Command Model' }),
+      netRegex: { id: '48CE', source: 'Serial-Jointed Command Model' },
       response: Responses.tankBuster(),
     },
     {
       id: 'Copied Serial Centrifugal Spin',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48C8', source: 'Serial-Jointed Command Model', capture: false }),
+      netRegex: { id: '48C8', source: 'Serial-Jointed Command Model', capture: false },
       response: Responses.goSides(),
     },
     {
       id: 'Copied Serial Sidestriking Spin',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48CA', source: 'Serial-Jointed Command Model', capture: false }),
+      netRegex: { id: '48CA', source: 'Serial-Jointed Command Model', capture: false },
       response: Responses.goFrontBack(),
     },
     {
       id: 'Copied Serial Shockwave',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48C3', source: 'Serial-Jointed Command Model', capture: false }),
+      netRegex: { id: '48C3', source: 'Serial-Jointed Command Model', capture: false },
       response: Responses.knockback('info'),
     },
     {
       id: 'Copied Hobbes Laser-Resistance Test',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '4805', source: 'Hobbes', capture: false }),
+      netRegex: { id: '4805', source: 'Hobbes', capture: false },
       response: Responses.aoe(),
     },
     {
       id: 'Copied Hobbes Right Arm',
       type: 'GameLog',
-      netRegex: NetRegexes.message({ line: 'The wall-mounted right arm begins to move.*?', capture: false }),
+      netRegex: {
+        line: 'The wall-mounted right arm begins to move.*?',
+        code: Util.gameLogCodes.message,
+        capture: false,
+      },
       infoText: (_data, _matches, output) => output.text(),
-      run: (data) => data.alliance = data.alliance ?? 'A',
+      run: (data) => data.alliance ??= 'A',
       outputStrings: {
         text: {
           en: 'Dodge Moving Circle',
@@ -127,9 +132,13 @@ Options.Triggers.push({
     {
       id: 'Copied Hobbes Flamethrowers',
       type: 'GameLog',
-      netRegex: NetRegexes.message({ line: 'The wall-mounted flamethrowers activate\..*?', capture: false }),
+      netRegex: {
+        line: 'The wall-mounted flamethrowers activate\..*?',
+        code: Util.gameLogCodes.message,
+        capture: false,
+      },
       alertText: (_data, _matches, output) => output.text(),
-      run: (data) => data.alliance = data.alliance || 'B',
+      run: (data) => data.alliance ??= 'B',
       outputStrings: {
         text: {
           en: 'Look Behind For Flamethrowers',
@@ -144,15 +153,23 @@ Options.Triggers.push({
     {
       id: 'Copied Hobbes Left Arm 1',
       type: 'GameLog',
-      netRegex: NetRegexes.message({ line: 'The wall-mounted left arm begins to move.*?', capture: false }),
+      netRegex: {
+        line: 'The wall-mounted left arm begins to move.*?',
+        code: Util.gameLogCodes.message,
+        capture: false,
+      },
       durationSeconds: 6,
       response: Responses.getOut('info'),
-      run: (data) => data.alliance = data.alliance || 'C',
+      run: (data) => data.alliance ??= 'C',
     },
     {
       id: 'Copied Hobbes Left Arm 2',
       type: 'GameLog',
-      netRegex: NetRegexes.message({ line: 'The wall-mounted left arm begins to move.*?', capture: false }),
+      netRegex: {
+        line: 'The wall-mounted left arm begins to move.*?',
+        code: Util.gameLogCodes.message,
+        capture: false,
+      },
       delaySeconds: 8,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -169,7 +186,11 @@ Options.Triggers.push({
     {
       id: 'Copied Hobbes Left Arm 3',
       type: 'GameLog',
-      netRegex: NetRegexes.message({ line: 'The wall-mounted left arm begins to move.*?', capture: false }),
+      netRegex: {
+        line: 'The wall-mounted left arm begins to move.*?',
+        code: Util.gameLogCodes.message,
+        capture: false,
+      },
       delaySeconds: 10,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -186,20 +207,24 @@ Options.Triggers.push({
     {
       id: 'Copied Hobbes Short Missile',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '00C4' }),
+      netRegex: { id: '00C4' },
       condition: Conditions.targetIsYou(),
       response: Responses.spread('alert'),
     },
     {
       id: 'Copied Hobbes Laser Sight',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '4807', source: 'Hobbes', capture: false }),
+      netRegex: { id: '4807', source: 'Hobbes', capture: false },
       response: Responses.stackMarker(),
     },
     {
       id: 'Copied Hobbes Electric Floor',
       type: 'GameLog',
-      netRegex: NetRegexes.message({ line: 'You hear frenzied movement from machines beneath.*?', capture: false }),
+      netRegex: {
+        line: 'You hear frenzied movement from machines beneath.*?',
+        code: Util.gameLogCodes.message,
+        capture: false,
+      },
       durationSeconds: 10,
       suppressSeconds: 15,
       infoText: (_data, _matches, output) => output.text(),
@@ -217,7 +242,11 @@ Options.Triggers.push({
     {
       id: 'Copied Hobbes Conveyer Belts',
       type: 'GameLog',
-      netRegex: NetRegexes.message({ line: 'The conveyer belts whirr to life!.*?', capture: false }),
+      netRegex: {
+        line: 'The conveyer belts whirr to life!.*?',
+        code: Util.gameLogCodes.message,
+        capture: false,
+      },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -233,7 +262,11 @@ Options.Triggers.push({
     {
       id: 'Copied Hobbes Oil 1',
       type: 'GameLog',
-      netRegex: NetRegexes.message({ line: 'Flammable oil is leaking from the floor.*?', capture: false }),
+      netRegex: {
+        line: 'Flammable oil is leaking from the floor.*?',
+        code: Util.gameLogCodes.message,
+        capture: false,
+      },
       durationSeconds: 3,
       suppressSeconds: 15,
       alertText: (_data, _matches, output) => output.text(),
@@ -251,7 +284,11 @@ Options.Triggers.push({
     {
       id: 'Copied Hobbes Oil 2',
       type: 'GameLog',
-      netRegex: NetRegexes.message({ line: 'Flammable oil is leaking from the floor.*?', capture: false }),
+      netRegex: {
+        line: 'Flammable oil is leaking from the floor.*?',
+        code: Util.gameLogCodes.message,
+        capture: false,
+      },
       delaySeconds: 6,
       durationSeconds: 3,
       suppressSeconds: 15,
@@ -270,7 +307,7 @@ Options.Triggers.push({
     {
       id: 'Copied Goliath Tank Exploder',
       type: 'Tether',
-      netRegex: NetRegexes.tether({ id: '0011', source: 'Medium Exploder' }),
+      netRegex: { id: '0011', source: 'Medium Exploder' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -287,32 +324,32 @@ Options.Triggers.push({
     {
       id: 'Copied Flight Unit 360 Bombing Manuever',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '4941', source: 'Flight Unit', capture: false }),
+      netRegex: { id: '4941', source: 'Flight Unit', capture: false },
       response: Responses.aoe(),
     },
     {
       id: 'Copied Flight Unit Ballistic Impact',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0017' }),
+      netRegex: { id: '0017' },
       condition: Conditions.targetIsYou(),
       response: Responses.spread('alert'),
     },
     {
       id: 'Copied Engels Marx Smash Right',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '4727', source: 'Engels', capture: false }),
+      netRegex: { id: '4727', source: 'Engels', capture: false },
       response: Responses.goRight(),
     },
     {
       id: 'Copied Engels Marx Smash Left',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '4726', source: 'Engels', capture: false }),
+      netRegex: { id: '4726', source: 'Engels', capture: false },
       response: Responses.goLeft(),
     },
     {
       id: 'Copied Engels Marx Smash Forward',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '472E', source: 'Engels', capture: false }),
+      netRegex: { id: '472E', source: 'Engels', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -328,7 +365,7 @@ Options.Triggers.push({
     {
       id: 'Copied Engels Marx Smash Back',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '472A', source: 'Engels', capture: false }),
+      netRegex: { id: '472A', source: 'Engels', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -344,7 +381,7 @@ Options.Triggers.push({
     {
       id: 'Copied Engels Marx Crush',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '4746', source: 'Engels', capture: false }),
+      netRegex: { id: '4746', source: 'Engels', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -360,14 +397,14 @@ Options.Triggers.push({
     {
       id: 'Copied Engels Precision Guided Missile',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '00C6' }),
+      netRegex: { id: '00C6' },
       condition: Conditions.targetIsYou(),
       response: Responses.tankBuster('info'),
     },
     {
       id: 'Copied Engels Diffuse Laser',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '4755', source: 'Engels', capture: false }),
+      netRegex: { id: '4755', source: 'Engels', capture: false },
       response: Responses.aoe(),
     },
     {
@@ -376,7 +413,7 @@ Options.Triggers.push({
       // Also suggest going to the front for towers.
       id: 'Copied Engels Energy Barrage 1',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '473C', source: 'Engels', capture: false }),
+      netRegex: { id: '473C', source: 'Engels', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -392,7 +429,7 @@ Options.Triggers.push({
     {
       id: 'Copied Engels Energy Barrage',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '473C', source: 'Engels', capture: false }),
+      netRegex: { id: '473C', source: 'Engels', capture: false },
       delaySeconds: 8,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -409,7 +446,7 @@ Options.Triggers.push({
     {
       id: 'Copied Engels Incendiary Bombing',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0017' }),
+      netRegex: { id: '0017' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -426,7 +463,7 @@ Options.Triggers.push({
     {
       id: 'Copied Engels Guided Missile',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '00C5' }),
+      netRegex: { id: '00C5' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -443,7 +480,7 @@ Options.Triggers.push({
     {
       id: 'Copied Engels Reverse-Jointed Goliaths',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '473F', source: 'Engels', capture: false }),
+      netRegex: { id: '473F', source: 'Engels', capture: false },
       durationSeconds: 4,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -460,7 +497,7 @@ Options.Triggers.push({
     {
       id: 'Copied Engels Incendiary Saturation Bombing',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '474E', source: 'Engels', capture: false }),
+      netRegex: { id: '474E', source: 'Engels', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -476,7 +513,7 @@ Options.Triggers.push({
     {
       id: 'Copied Engels Marx Thrust',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48A8', source: 'Engels', capture: false }),
+      netRegex: { id: '48A8', source: 'Engels', capture: false },
       delaySeconds: 9,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -493,32 +530,32 @@ Options.Triggers.push({
     {
       id: 'Copied 9S Neutralization',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48F5', source: '9S-Operated Walking Fortress' }),
+      netRegex: { id: '48F5', source: '9S-Operated Walking Fortress' },
       response: Responses.tankBuster(),
     },
     {
       id: 'Copied 9S Laser Saturation',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48F6', source: '9S-Operated Walking Fortress', capture: false }),
+      netRegex: { id: '48F6', source: '9S-Operated Walking Fortress', capture: false },
       response: Responses.aoe(),
     },
     {
       id: 'Copied 9S Laser Turret',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '4A74', source: '9S-Operated Walking Fortress', capture: false }),
+      netRegex: { id: '4A74', source: '9S-Operated Walking Fortress', capture: false },
       response: Responses.awayFromFront(),
     },
     {
       id: 'Copied 9S Ballistic Impact',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '008B' }),
+      netRegex: { id: '008B' },
       condition: Conditions.targetIsYou(),
       response: Responses.spread('alert'),
     },
     {
       id: 'Copied 9S Goliath Laser Turret',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '00A4' }),
+      netRegex: { id: '00A4' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -535,19 +572,19 @@ Options.Triggers.push({
     {
       id: 'Copied 9S Fore-Hind Cannons',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48DF', source: '9S-Operated Walking Fortress', capture: false }),
+      netRegex: { id: '48DF', source: '9S-Operated Walking Fortress', capture: false },
       response: Responses.goSides('info'),
     },
     {
       id: 'Copied 9S Dual-Flank Cannons',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48DE', source: '9S-Operated Walking Fortress', capture: false }),
+      netRegex: { id: '48DE', source: '9S-Operated Walking Fortress', capture: false },
       response: Responses.goFrontBack('info'),
     },
     {
       id: 'Copied 9S Engage Marx Support',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48D3', source: '9S-Operated Walking Fortress', capture: false }),
+      netRegex: { id: '48D3', source: '9S-Operated Walking Fortress', capture: false },
       delaySeconds: 4,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -566,19 +603,19 @@ Options.Triggers.push({
       // also triggers on the first boss.
       id: 'Copied 9S Serial-Jointed Service Models',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '48EA', source: '9S-Operated Walking Fortress', capture: false }),
+      netRegex: { id: '48EA', source: '9S-Operated Walking Fortress', capture: false },
       response: Responses.killAdds(),
     },
     {
       id: 'Copied 9S Engage Goliath Tank Support',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48E5', source: '9S-Operated Walking Fortress', capture: false }),
+      netRegex: { id: '48E5', source: '9S-Operated Walking Fortress', capture: false },
       response: Responses.killAdds(),
     },
     {
       id: 'Copied 9S Hack Goliath Tank',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48E7', source: '9S-Operated Walking Fortress', capture: false }),
+      netRegex: { id: '48E7', source: '9S-Operated Walking Fortress', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -594,14 +631,14 @@ Options.Triggers.push({
     {
       id: 'Copied 9S Shrapnel Impact',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48F3', source: '9S-Operated Walking Fortress', capture: false }),
+      netRegex: { id: '48F3', source: '9S-Operated Walking Fortress', capture: false },
       suppressSeconds: 2,
       response: Responses.stackMarker('info'),
     },
     {
       id: 'Copied 9S Bubble',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '48EB', source: '9S-Operated Walking Fortress', capture: false }),
+      netRegex: { id: '48EB', source: '9S-Operated Walking Fortress', capture: false },
       delaySeconds: 5,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -643,9 +680,11 @@ Options.Triggers.push({
         'The wall-mounted right arm begins to move': 'Der wandmontierte rechte Arm ist aktiv!',
         'The wall-mounted flamethrowers activate\.': 'Die wandmontierten Flammenwerfer sind aktiv!',
         'The wall-mounted left arm begins to move': 'Der wandmontierte linke Arm ist aktiv!',
-        'You hear frenzied movement from machines beneath': 'Die Maschinenwesen zu deinen Füßen bewegen sich!',
+        'You hear frenzied movement from machines beneath':
+          'Die Maschinenwesen zu deinen Füßen bewegen sich!',
         'The conveyer belts whirr to life!': 'Die Fließbänder sind aktiv!',
-        'Flammable oil is leaking from the floor': 'Zu deinen Füßen wird brennbare Flüssigkeit eingelassen!',
+        'Flammable oil is leaking from the floor':
+          'Zu deinen Füßen wird brennbare Flüssigkeit eingelassen!',
       },
       'replaceText': {
         '360-Degree Bombing Maneuver': 'Offensive: Raketenring',
@@ -738,7 +777,8 @@ Options.Triggers.push({
         'Warehouse A': 'l\'entrepôt A',
         'Warehouse B': 'l\'entrepôt B',
         'Warehouse C': 'l\'entrepôt C',
-        'You hear frenzied movement from machines beneath': 'Les formes de vie mécaniques sous vos pieds s\'activent!',
+        'You hear frenzied movement from machines beneath':
+          'Les formes de vie mécaniques sous vos pieds s\'activent!',
       },
       'replaceText': {
         '\\?': ' ?',

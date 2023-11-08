@@ -1,4 +1,5 @@
 Options.Triggers.push({
+  id: 'DunScaith',
   zoneId: ZoneId.DunScaith,
   timelineFile: 'dun_scaith.txt',
   timelineTriggers: [
@@ -14,14 +15,14 @@ Options.Triggers.push({
     {
       id: 'Dun Scaith Generic Stack-up',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '003E' }),
+      netRegex: { id: '003E' },
       response: Responses.stackMarkerOn(),
     },
     // DEATHGAZE
     {
       id: 'Dun Scaith Void Death Circle',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['1C7F', '1C90'], source: 'Deathgaze Hollow', capture: false }),
+      netRegex: { id: ['1C7F', '1C90'], source: 'Deathgaze Hollow', capture: false },
       suppressSeconds: 5,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -41,7 +42,7 @@ Options.Triggers.push({
       // This would allow for notifying who needs cleansing directly, but might be spammy
       id: 'Dun Scaith Doom',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['1C84', '1C85'], source: 'Deathgaze Hollow', capture: false }),
+      netRegex: { id: ['1C84', '1C85'], source: 'Deathgaze Hollow', capture: false },
       condition: (data) => data.CanCleanse(),
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -60,14 +61,14 @@ Options.Triggers.push({
       // The actual knockback cast is Void Aero IV, but it gives only 2-3s warning.
       id: 'Dun Scaith Blizzard Pillars',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1C8B', source: 'Deathgaze Hollow', capture: false }),
+      netRegex: { id: '1C8B', source: 'Deathgaze Hollow', capture: false },
       suppressSeconds: 5,
       response: Responses.knockback(),
     },
     {
       id: 'Dun Scaith Void Sprite',
       type: 'AddedCombatant',
-      netRegex: NetRegexes.addedCombatantFull({ npcNameId: '5508', capture: false }),
+      netRegex: { npcNameId: '5508', capture: false },
       suppressSeconds: 10,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -84,7 +85,7 @@ Options.Triggers.push({
     {
       id: 'Dun Scaith Aero 2',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0046' }),
+      netRegex: { id: '0046' },
       condition: Conditions.targetIsYou(),
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -104,7 +105,7 @@ Options.Triggers.push({
       // Mechanically the handling is the same
       id: 'Dun Scaith Aero 3',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['1C7B', '1C8D'], source: 'Deathgaze Hollow', capture: false }),
+      netRegex: { id: ['1C7B', '1C8D'], source: 'Deathgaze Hollow', capture: false },
       suppressSeconds: 5,
       response: Responses.knockback(),
     },
@@ -114,7 +115,7 @@ Options.Triggers.push({
       // and neither seems to target players directly.
       id: 'Dun Scaith Void Death Squares',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['1C82', '1C83'], source: 'Deathgaze Hollow', capture: false }),
+      netRegex: { id: ['1C82', '1C83'], source: 'Deathgaze Hollow', capture: false },
       suppressSeconds: 5,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -132,7 +133,7 @@ Options.Triggers.push({
     {
       id: 'Dun Scaith Scythe Drop',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0017' }),
+      netRegex: { id: '0017' },
       condition: Conditions.targetIsYou(),
       suppressSeconds: 5,
       infoText: (_data, _matches, output) => output.text(),
@@ -150,7 +151,7 @@ Options.Triggers.push({
     {
       id: 'Dun Scaith Jongleur\'s X',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1C98', source: 'Ferdiad Hollow' }),
+      netRegex: { id: '1C98', source: 'Ferdiad Hollow' },
       response: Responses.tankBuster(),
     },
     {
@@ -161,10 +162,10 @@ Options.Triggers.push({
       // To avoid this, we store the IDs of Atomos for later comparison.
       id: 'Dun Scaith Atomos Setup',
       type: 'AddedCombatant',
-      netRegex: NetRegexes.addedCombatantFull({ npcNameId: ['5510', '5511'] }),
+      netRegex: { npcNameId: ['5510', '5511'] },
       run: (data, matches) => {
-        data.cursing ?? (data.cursing = []);
-        data.wailing ?? (data.wailing = []);
+        data.cursing ??= [];
+        data.wailing ??= [];
         const id = matches.id.toUpperCase();
         matches.npcNameId === '5510' ? data.wailing.push(id) : data.cursing.push(id);
       },
@@ -174,11 +175,11 @@ Options.Triggers.push({
       // 1C9F:Aether is the circle AoE, 1CA0:Aetherial Chakram is the donut AoE
       id: 'Dun Scaith Atomos Compile',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['1C9F', '1CA0'] }),
+      netRegex: { id: ['1C9F', '1CA0'] },
       delaySeconds: .5,
       run: (data, matches) => {
-        data.sphere ?? (data.sphere = []);
-        data.donut ?? (data.donut = []);
+        data.sphere ??= [];
+        data.donut ??= [];
         const target = data.wailing?.includes(matches.targetId) ? 'wailing' : 'cursing';
         if (matches.id === '1C9F')
           data.sphere.push(target);
@@ -189,7 +190,7 @@ Options.Triggers.push({
     {
       id: 'Dun Scaith Atomos Response',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['1C9F', '1CA0'], capture: false }),
+      netRegex: { id: ['1C9F', '1CA0'], capture: false },
       delaySeconds: 1,
       suppressSeconds: 5,
       alertText: (data, _matches, output) => {
@@ -265,7 +266,7 @@ Options.Triggers.push({
     {
       id: 'Dun Scaith Atomos Cleanup',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: ['1CA1', '1CA2'], capture: false }),
+      netRegex: { id: ['1CA1', '1CA2'], capture: false },
       run: (data) => {
         delete data.cursing;
         delete data.wailing;
@@ -276,7 +277,7 @@ Options.Triggers.push({
     {
       id: 'Dun Scaith Blackfire',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1CAA', source: 'Ferdiad Hollow', capture: false }),
+      netRegex: { id: '1CAA', source: 'Ferdiad Hollow', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -293,7 +294,7 @@ Options.Triggers.push({
       // https://xivapi.com/Status/1137
       id: 'Dun Scaith Debilitator Fire',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '471', capture: false }),
+      netRegex: { effectId: '471', capture: false },
       suppressSeconds: 10,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -311,7 +312,7 @@ Options.Triggers.push({
       // https://xivapi.com/Status/1157
       id: 'Dun Scaith Debilitator Water',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '485', capture: false }),
+      netRegex: { effectId: '485', capture: false },
       suppressSeconds: 10,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -330,13 +331,13 @@ Options.Triggers.push({
       // Covers both 1E52 Aetherochemical Flare and 1D9D Supernova. Response to both is the same.
       id: 'Dun Scaith Proto-Ultima Raid Damage',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['1E52', '1D9D'], source: 'Proto Ultima', capture: false }),
+      netRegex: { id: ['1E52', '1D9D'], source: 'Proto Ultima', capture: false },
       response: Responses.aoe(),
     },
     {
       id: 'Dun Scaith Prey Markers',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '232' }),
+      netRegex: { effectId: '232' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -355,7 +356,7 @@ Options.Triggers.push({
       // The cast time on Aetheromodulator is under 3 seconds
       id: 'Dun Scaith Bit Circles',
       type: 'AddedCombatant',
-      netRegex: NetRegexes.addedCombatantFull({ npcNameId: '3782', capture: false }),
+      netRegex: { npcNameId: '3782', capture: false },
       suppressSeconds: 5,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -372,7 +373,7 @@ Options.Triggers.push({
     {
       id: 'Dun Scaith Aether Collectors',
       type: 'AddedCombatant',
-      netRegex: NetRegexes.addedCombatantFull({ npcNameId: '3781', capture: false }),
+      netRegex: { npcNameId: '3781', capture: false },
       suppressSeconds: 5,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -391,7 +392,7 @@ Options.Triggers.push({
       // The actual attack is 1D20, but the castbar windup is 1D1F
       id: 'Dun Scaith Shadespin',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1D1[EF]', source: 'Scathach', capture: false }),
+      netRegex: { id: '1D1[EF]', source: 'Scathach', capture: false },
       suppressSeconds: 5,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -408,14 +409,14 @@ Options.Triggers.push({
     {
       id: 'Dun Scaith Thirty Thorns',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: ['1D1B', '1D2B'], source: 'Scathach', capture: false }),
+      netRegex: { id: ['1D1B', '1D2B'], source: 'Scathach', capture: false },
       suppressSeconds: 5,
       response: Responses.outOfMelee(),
     },
     {
       id: 'Dun Scaith Thirty Arrows',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1D2F', source: 'Scathach', capture: false }),
+      netRegex: { id: '1D2F', source: 'Scathach', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -431,7 +432,7 @@ Options.Triggers.push({
     {
       id: 'Dun Scaith Thirty Souls',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1D32', source: 'Scathach', capture: false }),
+      netRegex: { id: '1D32', source: 'Scathach', capture: false },
       response: Responses.aoe(),
     },
     {
@@ -439,14 +440,18 @@ Options.Triggers.push({
       // However, the RP text seems to be the only indicator.
       id: 'Dun Scaith Shadow Links',
       type: 'GameLog',
-      netRegex: NetRegexes.message({ line: 'Shadows gather on the floor.*?', capture: false }),
+      netRegex: {
+        line: 'Shadows gather on the floor.*?',
+        code: Util.gameLogCodes.message,
+        capture: false,
+      },
       suppressSeconds: 5,
       response: Responses.stopMoving(),
     },
     {
       id: 'Dun Scaith Shadow Limb Spawn',
       type: 'AddedCombatant',
-      netRegex: NetRegexes.addedCombatantFull({ npcNameId: '5516', capture: false }),
+      netRegex: { npcNameId: '5516', capture: false },
       suppressSeconds: 5,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -463,7 +468,7 @@ Options.Triggers.push({
     {
       id: 'Dun Scaith Connla Spawn',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1CD1', source: 'Connla', capture: false }),
+      netRegex: { id: '1CD1', source: 'Connla', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -480,7 +485,7 @@ Options.Triggers.push({
       // This trigger is common to both Scathach and Diabolos, since handling is 100% identical.
       id: 'Dun Scaith Nox Orbs',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '005C' }),
+      netRegex: { id: '005C' },
       condition: Conditions.targetIsYou(),
       suppressSeconds: 5,
       alertText: (_data, _matches, output) => output.text(),
@@ -499,26 +504,26 @@ Options.Triggers.push({
       // This trigger is common to both Scathach and Diabolos, since handling is 100% identical.
       id: 'Dun Scaith Shadethrust',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['1D23', '1C1A'], source: ['Scathach', 'Diabolos Hollow'], capture: false }),
+      netRegex: { id: ['1D23', '1C1A'], source: ['Scathach', 'Diabolos Hollow'], capture: false },
       response: Responses.awayFromFront(),
     },
     // DIABOLOS
     {
       id: 'Dun Scaith Ultimate Terror',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1C12', source: 'Diabolos', capture: false }),
+      netRegex: { id: '1C12', source: 'Diabolos', capture: false },
       response: Responses.getIn(),
     },
     {
       id: 'Dun Scaith Nightmare',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['1C0E', '1C20'], capture: false }),
+      netRegex: { id: ['1C0E', '1C20'], capture: false },
       response: Responses.lookAway(),
     },
     {
       id: 'Dun Scaith Noctoshield',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ target: 'Diabolos', effectId: '1AA', capture: false }),
+      netRegex: { target: 'Diabolos', effectId: '1AA', capture: false },
       suppressSeconds: 5,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -535,14 +540,14 @@ Options.Triggers.push({
     {
       id: 'Dun Scaith Ruinous Omen',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['1C10', '1C11'], source: 'Diabolos', capture: false }),
+      netRegex: { id: ['1C10', '1C11'], source: 'Diabolos', capture: false },
       suppressSeconds: 5,
       response: Responses.aoe(),
     },
     {
       id: 'Dun Scaith Deathgates',
       type: 'AddedCombatant',
-      netRegex: NetRegexes.addedCombatantFull({ npcNameId: '5523', capture: false }),
+      netRegex: { npcNameId: '5523', capture: false },
       suppressSeconds: 5,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -559,17 +564,17 @@ Options.Triggers.push({
     {
       id: 'Dun Scaith Camisado',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1C19', source: 'Diabolos Hollow' }),
+      netRegex: { id: '1C19', source: 'Diabolos Hollow' },
       response: Responses.tankBuster(),
     },
     {
       id: 'Dun Scaith Hollow Night',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '005B' }),
+      netRegex: { id: '005B' },
       alertText: (data, matches, output) => {
         if (matches.target === data.me)
           return output.gazeStackOnYou();
-        return output.stackOnAndLookAway({ player: data.ShortName(matches.target) });
+        return output.stackOnAndLookAway({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         gazeStackOnYou: {
@@ -593,7 +598,7 @@ Options.Triggers.push({
     {
       id: 'Dun Scaith Hollow Omen',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['1C22', '1C23'], source: 'Diabolos Hollow', capture: false }),
+      netRegex: { id: ['1C22', '1C23'], source: 'Diabolos Hollow', capture: false },
       suppressSeconds: 5,
       response: Responses.bigAoe(),
     },
@@ -601,13 +606,13 @@ Options.Triggers.push({
       // This is the tank version of the stack marker. It has minimal circular bordering
       id: 'Dun Scaith Blindside',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '005D' }),
+      netRegex: { id: '005D' },
       response: Responses.stackMarkerOn(),
     },
     {
       id: 'Dun Scaith Earth Shaker',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0028' }),
+      netRegex: { id: '0028' },
       condition: Conditions.targetIsYou(),
       response: Responses.earthshaker(),
     },

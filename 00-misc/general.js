@@ -3,18 +3,24 @@ const caresAboutTankStuff = (data) => {
 };
 // Triggers for all occasions and zones.
 Options.Triggers.push({
+  id: 'CactbotGeneral',
   zoneId: ZoneId.MatchAll,
   triggers: [
     {
       id: 'General Provoke',
+      comment: {
+        cn: '仅在非自身小队成员释放“挑衅”且自身为坦克/治疗/青魔法师时触发。',
+      },
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '1D6D' }),
+      netRegex: { id: '1D6D' },
       condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.source) }),
+      infoText: (data, matches, output) => {
+        return output.text({ player: data.party.member(matches.source) });
+      },
       outputStrings: {
         text: {
           en: 'Provoke: ${player}',
@@ -28,8 +34,11 @@ Options.Triggers.push({
     },
     {
       id: 'General Frog Legs',
+      comment: {
+        cn: '仅在非自身小队成员释放“蛙腿”且自身为坦克/治疗/青魔法师时触发。',
+      },
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '4783' }),
+      netRegex: { id: '4783' },
       condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
@@ -38,8 +47,8 @@ Options.Triggers.push({
       suppressSeconds: 0.5,
       infoText: (data, matches, output) => {
         if (matches.targetId === 'E0000000')
-          return output.noTarget({ player: data.ShortName(matches.source) });
-        return output.text({ player: data.ShortName(matches.source) });
+          return output.noTarget({ player: data.party.member(matches.source) });
+        return output.text({ player: data.party.member(matches.source) });
       },
       outputStrings: {
         text: {
@@ -62,14 +71,18 @@ Options.Triggers.push({
     },
     {
       id: 'General Shirk',
+      comment: {
+        cn: '仅在非自身小队成员释放“退避”且自身为坦克/治疗/青魔法师时触发。',
+      },
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '1D71' }),
+      netRegex: { id: '1D71' },
       condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.source) }),
+      infoText: (data, matches, output) =>
+        output.text({ player: data.party.member(matches.source) }),
       outputStrings: {
         text: {
           en: 'Shirk: ${player}',
@@ -83,14 +96,18 @@ Options.Triggers.push({
     },
     {
       id: 'General Holmgang',
+      comment: {
+        cn: '仅在非自身小队成员释放“死斗”且自身为坦克/治疗/青魔法师时触发。',
+      },
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '2B' }),
+      netRegex: { id: '2B' },
       condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.source) }),
+      infoText: (data, matches, output) =>
+        output.text({ player: data.party.member(matches.source) }),
       outputStrings: {
         text: {
           en: 'Holmgang: ${player}',
@@ -104,14 +121,18 @@ Options.Triggers.push({
     },
     {
       id: 'General Hallowed',
+      comment: {
+        cn: '仅在非自身小队成员释放“神圣领域”且自身为坦克/治疗/青魔法师时触发。',
+      },
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '1E' }),
+      netRegex: { id: '1E' },
       condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.source) }),
+      infoText: (data, matches, output) =>
+        output.text({ player: data.party.member(matches.source) }),
       outputStrings: {
         text: {
           en: 'Hallowed: ${player}',
@@ -125,14 +146,18 @@ Options.Triggers.push({
     },
     {
       id: 'General Superbolide',
+      comment: {
+        cn: '仅在非自身小队成员释放“超火流星”且自身为坦克/治疗/青魔法师时触发。',
+      },
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '3F18' }),
+      netRegex: { id: '3F18' },
       condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.source) }),
+      infoText: (data, matches, output) =>
+        output.text({ player: data.party.member(matches.source) }),
       outputStrings: {
         text: {
           en: 'Bolide: ${player}',
@@ -146,14 +171,18 @@ Options.Triggers.push({
     },
     {
       id: 'General Living',
+      comment: {
+        cn: '仅在非自身小队成员释放“行尸走肉”且自身为坦克/治疗/青魔法师时触发。',
+      },
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: 'E36' }),
+      netRegex: { id: 'E36' },
       condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.source) }),
+      infoText: (data, matches, output) =>
+        output.text({ player: data.party.member(matches.source) }),
       outputStrings: {
         text: {
           en: 'Living: ${player}',
@@ -167,14 +196,18 @@ Options.Triggers.push({
     },
     {
       id: 'General Walking',
+      comment: {
+        cn: '仅在非自身小队成员获得“死而不僵”且自身为坦克/治疗/青魔法师时触发。',
+      },
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '32B' }),
+      netRegex: { effectId: '32B' },
       condition: (data, matches) => {
         if (matches.source !== data.me && !data.party.inAlliance(matches.source))
           return false;
         return caresAboutTankStuff(data);
       },
-      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.source) }),
+      infoText: (data, matches, output) =>
+        output.text({ player: data.party.member(matches.source) }),
       outputStrings: {
         text: {
           en: 'Walking: ${player}',
@@ -191,7 +224,15 @@ Options.Triggers.push({
       // the message is sent to this channel; when a ready check is invoked by others, then it
       // would be sent to the 0239 channel.  (Sometimes this is also sent to 0139, unknown why?)
       id: 'General Ready Check',
-      netRegex: NetRegexes.gameLog({ line: '(?:You have commenced a ready check|\\y{Name} has initiated a ready check).*?', code: ['0039', '0139', '0239'], capture: false }),
+      comment: {
+        cn: '在队友发起准备确认时，播放D.Va的“Game on”音效(^-^)V',
+      },
+      type: 'GameLog',
+      netRegex: {
+        line: '(?:You have commenced a ready check|\\y{Name} has initiated a ready check).*?',
+        code: ['0039', '0139', '0239'],
+        capture: false,
+      },
       sound: '../../resources/sounds/Overwatch/D.Va_-_Game_on.webm',
       soundVolume: 0.6,
     },
@@ -203,7 +244,8 @@ Options.Triggers.push({
         'has initiated a ready check': 'eine Bereitschaftsanfrage gestellt',
         'You have commenced a ready check': 'Du hast eine Bereitschaftsanfrage gestellt',
         'You poke the striking dummy': 'Du stupst die Trainingspuppe an',
-        'You psych yourself up alongside the striking dummy': 'Du willst wahren Kampfgeist in der Trainingspuppe entfachen',
+        'You psych yourself up alongside the striking dummy':
+          'Du willst wahren Kampfgeist in der Trainingspuppe entfachen',
         'You burst out laughing at the striking dummy': 'Du lachst herzlich mit der Trainingspuppe',
         'You clap for the striking dummy': 'Du klatschst begeistert Beifall für die Trainingspuppe',
       },
@@ -213,9 +255,12 @@ Options.Triggers.push({
       replaceSync: {
         ' has initiated a ready check': '',
         'You have commenced a ready check\\|': 'Un appel de préparation a été lancé par ',
-        'You poke the striking dummy': 'Vous touchez légèrement le mannequin d\'entraînement du doigt',
-        'You psych yourself up alongside the striking dummy': 'Vous vous motivez devant le mannequin d\'entraînement',
-        'You burst out laughing at the striking dummy': 'Vous vous esclaffez devant le mannequin d\'entraînement',
+        'You poke the striking dummy':
+          'Vous touchez légèrement le mannequin d\'entraînement du doigt',
+        'You psych yourself up alongside the striking dummy':
+          'Vous vous motivez devant le mannequin d\'entraînement',
+        'You burst out laughing at the striking dummy':
+          'Vous vous esclaffez devant le mannequin d\'entraînement',
         'You clap for the striking dummy': 'Vous applaudissez le mannequin d\'entraînement',
       },
     },

@@ -1,11 +1,12 @@
 Options.Triggers.push({
+  id: 'TheBindingCoilOfBahamutTurn4',
   zoneId: ZoneId.TheBindingCoilOfBahamutTurn4,
   timelineFile: 't4.txt',
   triggers: [
     {
       id: 'T4 Gravity Thrust',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Spinner-Rook', id: '4D4' }),
+      netRegex: { source: 'Spinner-Rook', id: '4D4' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -15,13 +16,14 @@ Options.Triggers.push({
           fr: 'LOS Percée gravitationelle',
           ja: 'グラビデカノン',
           cn: '死刑',
+          ko: '중력포',
         },
       },
     },
     {
       id: 'T4 Pox',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Spinner-Rook', id: '4D5' }),
+      netRegex: { source: 'Spinner-Rook', id: '4D5' },
       condition: Conditions.targetIsYou(),
       alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -31,13 +33,14 @@ Options.Triggers.push({
           fr: 'LOS Vérole',
           ja: 'ポックス',
           cn: '血量上限降低',
+          ko: '두창',
         },
       },
     },
     {
       id: 'T4 Reminder',
       type: 'AddedCombatant',
-      netRegex: NetRegexes.addedCombatant({ name: 'Clockwork Knight', capture: false }),
+      netRegex: { name: 'Clockwork Knight', capture: false },
       suppressSeconds: 100000,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -47,6 +50,7 @@ Options.Triggers.push({
           fr: 'Magique sur Soldat, Physique sur Chevalier',
           ja: '魔法はソルジャー、物理はナイト',
           cn: '法系打士兵，物理打骑士',
+          ko: '병사 마법공격, 기사 물리공격',
         },
       },
     },

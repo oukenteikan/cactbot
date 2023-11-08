@@ -1,4 +1,5 @@
 Options.Triggers.push({
+  id: 'TheNavelHard',
   zoneId: ZoneId.TheNavelHard,
   timelineFile: 'titan-hm.txt',
   timelineTriggers: [
@@ -33,9 +34,11 @@ Options.Triggers.push({
     {
       id: 'TitanHm Damage Down',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '3E' }),
+      netRegex: { effectId: '3E' },
       condition: (data) => data.CanCleanse(),
-      infoText: (data, matches, output) => output.text({ player: data.ShortName(matches.target) }),
+      infoText: (data, matches, output) => {
+        return output.text({ player: data.party.member(matches.target) });
+      },
       outputStrings: {
         text: {
           en: 'Cleanse ${player}',

@@ -14,6 +14,7 @@ const shouldDieOnLaser = (data) => {
 };
 // O4S - Deltascape 4.0 Savage
 Options.Triggers.push({
+  id: 'DeltascapeV40Savage',
   zoneId: ZoneId.DeltascapeV40Savage,
   timelineFile: 'o4s.txt',
   timelineTriggers: [
@@ -40,7 +41,7 @@ Options.Triggers.push({
       // Phase Tracker: Thunder III not after Dualcast.
       id: 'O4S Exdeath Thunder III Counter',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '23F9', source: 'Exdeath', capture: false }),
+      netRegex: { id: '23F9', source: 'Exdeath', capture: false },
       run: (data) => {
         data.thunderCount = (data.thunderCount ?? 0) + 1;
       },
@@ -49,7 +50,7 @@ Options.Triggers.push({
       // Fire III + Dualcast.
       id: 'O4S Exdeath Fire III Counter',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '23F5', source: 'Exdeath', capture: false }),
+      netRegex: { id: '23F5', source: 'Exdeath', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -66,7 +67,7 @@ Options.Triggers.push({
       // Blizzard III + Dualcast.
       id: 'O4S Exdeath Blizzard III',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '23F7', source: 'Exdeath', capture: false }),
+      netRegex: { id: '23F7', source: 'Exdeath', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -83,7 +84,7 @@ Options.Triggers.push({
       // Thunder III + Dualcast.
       id: 'O4S Exdeath Thunder III',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '23F9', source: 'Exdeath', capture: false }),
+      netRegex: { id: '23F9', source: 'Exdeath', capture: false },
       alertText: (data, _matches, output) => {
         // Tanks/healers always get an alert.
         if (data.role === 'tank' || data.role === 'healer')
@@ -130,30 +131,30 @@ Options.Triggers.push({
       // Fire III after Dualcast.
       id: 'O4S Exdeath Ultimate Fire III',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '23FB', source: 'Exdeath', capture: false }),
+      netRegex: { id: '23FB', source: 'Exdeath', capture: false },
       response: Responses.stopMoving(),
     },
     {
       // Blizzard III after Dualcast.
       id: 'O4S Exdeath Ultimate Blizzard III',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '23FC', source: 'Exdeath', capture: false }),
+      netRegex: { id: '23FC', source: 'Exdeath', capture: false },
       response: Responses.moveAround(),
     },
     {
       // Thunder III after Dualcast.
       id: 'O4S Exdeath Ultimate Thunder III',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '23FD', source: 'Exdeath', capture: false }),
+      netRegex: { id: '23FD', source: 'Exdeath', capture: false },
       response: Responses.getOut(),
     },
     {
       // Flare
       id: 'O4S Exdeath Flare',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2401', source: 'Exdeath' }),
+      netRegex: { id: '2401', source: 'Exdeath' },
       condition: (data, matches) => {
-        data.flareTargets ?? (data.flareTargets = []);
+        data.flareTargets ??= [];
         data.flareTargets.push(matches.target);
         return data.flareTargets.length === 3;
       },
@@ -177,7 +178,7 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Grand Cross Alpha Tracker',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '242B', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '242B', source: 'Neo Exdeath', capture: false },
       run: (data) => {
         data.phase = 'alpha';
         data.alphaCount = (data.alphaCount ?? 0) + 1;
@@ -188,7 +189,7 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Grand Cross Delta Tracker',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '242C', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '242C', source: 'Neo Exdeath', capture: false },
       run: (data) => {
         data.phase = 'delta';
         delete data.waterHealer;
@@ -197,7 +198,7 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Grand Cross Omega Tracker',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '242D', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '242D', source: 'Neo Exdeath', capture: false },
       run: (data) => {
         data.phase = 'omega';
         delete data.waterHealer;
@@ -207,69 +208,69 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Neverwhere Tracker',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2426', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '2426', source: 'Neo Exdeath', capture: false },
       run: (data) => data.finalphase = true,
     },
     {
       id: 'O4S Neo White Wound Gain',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '564' }),
+      netRegex: { effectId: '564' },
       condition: Conditions.targetIsYou(),
       run: (data) => data.whiteWound = true,
     },
     {
       id: 'O4S Neo White Wound Lost',
       type: 'LosesEffect',
-      netRegex: NetRegexes.losesEffect({ effectId: '564' }),
+      netRegex: { effectId: '564' },
       condition: Conditions.targetIsYou(),
       run: (data) => data.whiteWound = false,
     },
     {
       id: 'O4S Neo Black Wound Gain',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '565' }),
+      netRegex: { effectId: '565' },
       condition: Conditions.targetIsYou(),
       run: (data) => data.blackWound = true,
     },
     {
       id: 'O4S Neo Black Wound Lost',
       type: 'LosesEffect',
-      netRegex: NetRegexes.losesEffect({ effectId: '565' }),
+      netRegex: { effectId: '565' },
       condition: Conditions.targetIsYou(),
       run: (data) => data.blackWound = false,
     },
     {
       id: 'O4S Neo Beyond Death Gain',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '566' }),
+      netRegex: { effectId: '566' },
       condition: Conditions.targetIsYou(),
       run: (data) => data.beyondDeath = true,
     },
     {
       id: 'O4S Neo Beyond Death Lost',
       type: 'LosesEffect',
-      netRegex: NetRegexes.losesEffect({ effectId: '566' }),
+      netRegex: { effectId: '566' },
       condition: Conditions.targetIsYou(),
       run: (data) => data.beyondDeath = false,
     },
     {
       id: 'O4S Neo Allagan Field Gain',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '1C6' }),
+      netRegex: { effectId: '1C6' },
       condition: Conditions.targetIsYou(),
       run: (data) => data.allaganField = true,
     },
     {
       id: 'O4S Neo Allagan Field Lost',
       type: 'LosesEffect',
-      netRegex: NetRegexes.losesEffect({ effectId: '1C6' }),
+      netRegex: { effectId: '1C6' },
       condition: Conditions.targetIsYou(),
       run: (data) => data.allaganField = false,
     },
     {
       id: 'O4S Neo Flood of Naught: Inside',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '240E', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '240E', source: 'Neo Exdeath', capture: false },
       durationSeconds: 6,
       alarmText: (data, _matches, output) => {
         if (shouldDieOnLaser(data))
@@ -322,7 +323,7 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Flood of Naught: Outside',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '240F', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '240F', source: 'Neo Exdeath', capture: false },
       durationSeconds: 6,
       alarmText: (data, _matches, output) => {
         if (shouldDieOnLaser(data))
@@ -375,7 +376,7 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Flood of Naught: Colors Purple Blue',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2411', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '2411', source: 'Neo Exdeath', capture: false },
       durationSeconds: 6,
       alarmText: (data, _matches, output) => {
         if (!shouldDieOnLaser(data))
@@ -458,7 +459,7 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Flood of Naught: Colors Blue Purple',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2412', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '2412', source: 'Neo Exdeath', capture: false },
       durationSeconds: 6,
       alarmText: (data, _matches, output) => {
         if (!shouldDieOnLaser(data))
@@ -541,7 +542,7 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Laser Counter',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['240E', '240F', '2411', '2412'], source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: ['240E', '240F', '2411', '2412'], source: 'Neo Exdeath', capture: false },
       run: (data) => {
         if (data.phase !== 'omega')
           return;
@@ -557,7 +558,7 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Flood of Naught: Charge',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2416', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '2416', source: 'Neo Exdeath', capture: false },
       infoText: (data, _matches, output) => {
         if (data.allaganField) {
           if (data.role === 'tank')
@@ -615,7 +616,7 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Double Attack',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '241C', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '241C', source: 'Neo Exdeath', capture: false },
       alertText: (data, _matches, output) => {
         if (data.role === 'tank')
           return output.doubleAttack();
@@ -644,7 +645,7 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Grand Cross Alpha',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '242B', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '242B', source: 'Neo Exdeath', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       tts: (_data, _matches, output) => output.tts(),
       outputStrings: {
@@ -669,7 +670,7 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Grand Cross Delta',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '242C', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '242C', source: 'Neo Exdeath', capture: false },
       infoText: (data, _matches, output) => {
         if (data.role === 'tank')
           return output.beInFront();
@@ -738,13 +739,13 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Grand Cross Omega',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '242D', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '242D', source: 'Neo Exdeath', capture: false },
       response: Responses.goMiddle(),
     },
     {
       id: 'O4S Neo Forked Lightning',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '24B' }),
+      netRegex: { effectId: '24B' },
       condition: Conditions.targetIsYou(),
       delaySeconds: 1,
       response: Responses.spread(),
@@ -752,7 +753,7 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Acceleration Bomb',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '568' }),
+      netRegex: { effectId: '568' },
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
       alarmText: (data, _matches, output) => {
@@ -782,7 +783,7 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Acceleration Bomb Delta',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '568' }),
+      netRegex: { effectId: '568' },
       condition: (data, matches) => matches.target === data.me && data.phase === 'delta',
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -799,7 +800,7 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Omega Shriek',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '1C4' }),
+      netRegex: { effectId: '1C4' },
       condition: (data, matches) => matches.target === data.me && data.phase === 'omega',
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 5,
       alertText: (_data, _matches, output) => output.text(),
@@ -817,14 +818,14 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Water Tracker',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '3FF' }),
+      netRegex: { effectId: '3FF' },
       run: (data, matches) => data.waterHealer = matches.target,
     },
     {
       // Water Me (Delta/Omega)
       id: 'O4S Neo Water Me',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '3FF' }),
+      netRegex: { effectId: '3FF' },
       condition: Conditions.targetIsYou(),
       alarmText: (data, _matches, output) => {
         // Not clear where to tell the healer where to go on delta
@@ -857,13 +858,14 @@ Options.Triggers.push({
       // Beyond Death Tank (Delta)
       id: 'O4S Neo Beyond Death Delta Tank',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '566' }),
-      condition: (data, matches) => data.phase === 'delta' && matches.target === data.me && data.role === 'tank',
+      netRegex: { effectId: '566' },
+      condition: (data, matches) =>
+        data.phase === 'delta' && matches.target === data.me && data.role === 'tank',
       delaySeconds: 0.5,
       infoText: (data, _matches, output) => {
         // Something went awry, or maybe healers dead.  Just say stack on water anyway,
         // instead of trying to be smart when the healers die.
-        if (data.waterHealer)
+        if (data.waterHealer !== undefined)
           return output.stackOnWaterhealer({ player: data.waterHealer });
         return output.stackOnWater();
       },
@@ -883,8 +885,9 @@ Options.Triggers.push({
       // Beyond Death (Delta)
       id: 'O4S Neo Beyond Death Delta Initial',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '566' }),
-      condition: (data, matches) => data.phase === 'delta' && matches.target === data.me && data.role !== 'tank',
+      netRegex: { effectId: '566' },
+      condition: (data, matches) =>
+        data.phase === 'delta' && matches.target === data.me && data.role !== 'tank',
       infoText: (_data, _matches, output) => output.beyondDeath(),
       outputStrings: {
         beyondDeath: {
@@ -901,12 +904,12 @@ Options.Triggers.push({
       // Off Balance (Omega)
       id: 'O4S Neo Off Balance Omega',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '569' }),
+      netRegex: { effectId: '569' },
       condition: (data, matches) => data.phase === 'omega' && matches.target === data.me,
       delaySeconds: 0.5,
       infoText: (data, _matches, output) => {
         // Good for both dps and tanks.
-        if (data.waterHealer)
+        if (data.waterHealer !== undefined)
           return output.stackUnderBossOnWaterhealer({ waterHealer: data.waterHealer });
         return output.stackOnWater();
       },
@@ -932,27 +935,27 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Earthshaker on Tank',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0028' }),
+      netRegex: { id: '0028' },
       condition: (data, matches) => matches.target === data.me && data.role === 'tank',
       response: Responses.earthshaker('info'),
     },
     {
       id: 'O4S Neo Earthshaker on not Tank',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0028' }),
+      netRegex: { id: '0028' },
       condition: (data, matches) => matches.target === data.me && data.role !== 'tank',
       response: Responses.earthshaker('alarm'),
     },
     {
       id: 'O4S Neo Delta Attack',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '241E', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '241E', source: 'Neo Exdeath', capture: false },
       response: Responses.getTogether(),
     },
     {
       id: 'O4S Neo Almagest',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2417', source: 'Neo Exdeath', capture: false }),
+      netRegex: { id: '2417', source: 'Neo Exdeath', capture: false },
       alertText: (_data, _matches, output) => output.almagest(),
       run: (data) => {
         data.almagestCount = (data.almagestCount ?? 0) + 1;
@@ -971,9 +974,9 @@ Options.Triggers.push({
     {
       id: 'O4S Neo Flare',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2401', source: 'Neo Exdeath' }),
+      netRegex: { id: '2401', source: 'Neo Exdeath' },
       condition: (data, matches) => {
-        data.flareTargets ?? (data.flareTargets = []);
+        data.flareTargets ??= [];
         data.flareTargets.push(matches.target);
         return data.flareTargets.length === 3;
       },

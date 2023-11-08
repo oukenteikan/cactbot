@@ -1,12 +1,13 @@
 // Shinryu Extreme
 Options.Triggers.push({
+  id: 'TheMinstrelsBalladShinryusDomain',
   zoneId: ZoneId.TheMinstrelsBalladShinryusDomain,
   timelineFile: 'shinryu-ex.txt',
   triggers: [
     {
       id: 'ShinryuEx Heart Cleanup',
       type: 'RemovedCombatant',
-      netRegex: NetRegexes.removingCombatant({ name: 'Shinryu', capture: false }),
+      netRegex: { name: 'Shinryu', capture: false },
       run: (data) => {
         // Explicitly clear so ugly heart message doesn't appear after wipe.
         delete data.phase;
@@ -15,36 +16,36 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Phase 1',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '25DE', source: 'Shinryu', capture: false }),
+      netRegex: { id: '25DE', source: 'Shinryu', capture: false },
       run: (data) => data.phase = 1,
     },
     {
       id: 'ShinryuEx Phase 2',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '25E7', source: 'Shinryu', capture: false }),
+      netRegex: { id: '25E7', source: 'Shinryu', capture: false },
       run: (data) => data.phase = 2,
     },
     {
       id: 'ShinryuEx Phase 3',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '25E4', source: 'Shinryu', capture: false }),
+      netRegex: { id: '25E4', source: 'Shinryu', capture: false },
       run: (data) => data.phase = 3,
     },
     {
       id: 'ShinryuEx Phase 4',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '264E', source: 'Shinryu', capture: false }),
+      netRegex: { id: '264E', source: 'Shinryu', capture: false },
       run: (data) => data.phase = 4,
     },
     {
       id: 'ShinryuEx Akh Morn',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '25F3', source: 'Shinryu' }),
+      netRegex: { id: '25F3', source: 'Shinryu' },
       alertText: (data, matches, output) => {
         if (matches.target === data.me)
           return output.akhMornOnYou();
         else if (data.role === 'tank')
-          return output.akhMornOn({ player: data.ShortName(matches.target) });
+          return output.akhMornOn({ player: data.party.member(matches.target) });
       },
       infoText: (data, matches, output) => {
         if (matches.target === data.me || data.role === 'tank')
@@ -81,7 +82,7 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Diamond Dust',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '25DD', source: 'Shinryu', capture: false }),
+      netRegex: { id: '25DD', source: 'Shinryu', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -97,7 +98,7 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Dragonfist',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2611', source: 'Shinryu', capture: false }),
+      netRegex: { id: '2611', source: 'Shinryu', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -113,7 +114,7 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Hellfire',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '25DB', source: 'Shinryu', capture: false }),
+      netRegex: { id: '25DB', source: 'Shinryu', capture: false },
       durationSeconds: 7,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -132,7 +133,7 @@ Options.Triggers.push({
       // Probably the phase conditional could get removed if it did.
       id: 'ShinryuEx Hypernova',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['271F', '25E8'], source: 'Right Wing', capture: false }),
+      netRegex: { id: ['271F', '25E8'], source: 'Right Wing', capture: false },
       durationSeconds: 7,
       alertText: (data, _matches, output) => {
         if (data.phase === 3)
@@ -161,7 +162,7 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Judgement Bolt',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '25DC', source: 'Shinryu', capture: false }),
+      netRegex: { id: '25DC', source: 'Shinryu', capture: false },
       durationSeconds: 7,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -178,7 +179,12 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Levinbolt',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['25EA', '2720', '2725'], source: 'Right Wing', target: 'Right Wing', capture: false }),
+      netRegex: {
+        id: ['25EA', '2720', '2725'],
+        source: 'Right Wing',
+        target: 'Right Wing',
+        capture: false,
+      },
       durationSeconds: 7,
       alertText: (data, _matches, output) => {
         if (data.phase === 3)
@@ -207,7 +213,12 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Levinbolt Phase 3',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['25EA', '2720', '2725'], source: 'Right Wing', target: 'Right Wing', capture: false }),
+      netRegex: {
+        id: ['25EA', '2720', '2725'],
+        source: 'Right Wing',
+        target: 'Right Wing',
+        capture: false,
+      },
       condition: (data) => data.phase === 3,
       delaySeconds: 9.5,
       alarmText: (_data, _matches, output) => output.text(),
@@ -225,9 +236,10 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Icicle Left',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '25EF', source: 'Icicle' }),
+      netRegex: { id: '25EF', source: 'Icicle' },
       condition: (_data, matches) => {
-        return Math.round(parseFloat(matches.x)) === -30 && Math.round(parseFloat(matches.y)) === -15;
+        return Math.round(parseFloat(matches.x)) === -30 &&
+          Math.round(parseFloat(matches.y)) === -15;
       },
       alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -244,9 +256,10 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Icicle Right',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '25EF', source: 'Icicle' }),
+      netRegex: { id: '25EF', source: 'Icicle' },
       condition: (_data, matches) => {
-        return Math.round(parseFloat(matches.x)) === -30 && Math.round(parseFloat(matches.y)) === -25;
+        return Math.round(parseFloat(matches.x)) === -30 &&
+          Math.round(parseFloat(matches.y)) === -25;
       },
       alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -263,7 +276,7 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Tidal Wave',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '25DA', source: 'Shinryu', capture: false }),
+      netRegex: { id: '25DA', source: 'Shinryu', capture: false },
       delaySeconds: 3,
       durationSeconds: 5,
       infoText: (_data, _matches, output) => output.text(),
@@ -281,7 +294,7 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Final Tidal Wave',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '264E', source: 'Shinryu', capture: false }),
+      netRegex: { id: '264E', source: 'Shinryu', capture: false },
       condition: (data) => data.role === 'healer',
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -298,7 +311,7 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Tail Slap',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '25E2', source: 'Tail', capture: false }),
+      netRegex: { id: '25E2', source: 'Tail', capture: false },
       delaySeconds: 2,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -315,7 +328,7 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Heart',
       type: 'AddedCombatant',
-      netRegex: NetRegexes.addedCombatant({ name: 'The Worm\'s Heart', capture: false }),
+      netRegex: { name: 'The Worm\'s Heart', capture: false },
       condition: (data) => {
         // Prevent ugly heart message on wipe.
         return data.phase === 1;
@@ -337,7 +350,7 @@ Options.Triggers.push({
       // TODO: can't find the id of this, so using all of them.
       id: 'ShinryuEx Divebomb',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['1FA8', '1FF4', '2603'], source: 'Shinryu', capture: false }),
+      netRegex: { id: ['1FA8', '1FF4', '2603'], source: 'Shinryu', capture: false },
       alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -353,16 +366,16 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Death Sentence',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '260A', source: 'Hakkinryu' }),
+      netRegex: { id: '260A', source: 'Hakkinryu' },
       alertText: (data, matches, output) => {
         if (matches.target === data.me)
           return output.deathSentenceOnYou();
         else if (data.role === 'healer')
-          return output.deathSentenceOn({ player: data.ShortName(matches.target) });
+          return output.deathSentenceOn({ player: data.party.member(matches.target) });
       },
       infoText: (data, matches, output) => {
         if (matches.target !== data.me && data.role !== 'healer')
-          return output.deathSentenceOn({ player: data.ShortName(matches.target) });
+          return output.deathSentenceOn({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         deathSentenceOn: {
@@ -386,19 +399,19 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Tera Slash',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '264B', source: 'Shinryu' }),
+      netRegex: { id: '264B', source: 'Shinryu' },
       response: Responses.tankBusterSwap(),
     },
     {
       id: 'ShinryuEx Wormwail',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2648', source: 'Shinryu', capture: false }),
+      netRegex: { id: '2648', source: 'Shinryu', capture: false },
       response: Responses.getUnder(),
     },
     {
       id: 'ShinryuEx Breath',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '264A', source: 'Shinryu', capture: false }),
+      netRegex: { id: '264A', source: 'Shinryu', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -414,7 +427,7 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Final Left Wing',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2718', source: 'Left Wing', capture: false }),
+      netRegex: { id: '2718', source: 'Left Wing', capture: false },
       condition: (data) => !data.finalWing,
       alertText: (_data, _matches, output) => output.text(),
       run: (data) => data.finalWing = true,
@@ -432,7 +445,7 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Final Right Wing',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2719', source: 'Right Wing', capture: false }),
+      netRegex: { id: '2719', source: 'Right Wing', capture: false },
       condition: (data) => !data.finalWing,
       alertText: (_data, _matches, output) => output.text(),
       run: (data) => data.finalWing = true,
@@ -450,7 +463,7 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Tethers',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0061' }),
+      netRegex: { id: '0061' },
       condition: Conditions.targetIsYou(),
       delaySeconds: 3.8,
       infoText: (data, _matches, output) => {
@@ -480,7 +493,7 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Tail Marker',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '007E' }),
+      netRegex: { id: '007E' },
       condition: Conditions.targetIsYou(),
       alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -497,9 +510,9 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Shakers',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0028' }),
+      netRegex: { id: '0028' },
       condition: (data, matches) => {
-        data.shakerTargets ?? (data.shakerTargets = []);
+        data.shakerTargets ??= [];
         data.shakerTargets.push(matches.target);
         return data.shakerTargets.length === 2;
       },
@@ -534,7 +547,7 @@ Options.Triggers.push({
     {
       id: 'ShinryuEx Cocoon Marker',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0039' }),
+      netRegex: { id: '0039' },
       condition: Conditions.targetIsYou(),
       response: Responses.spread(),
     },

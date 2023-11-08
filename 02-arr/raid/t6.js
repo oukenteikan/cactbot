@@ -1,4 +1,5 @@
 Options.Triggers.push({
+  id: 'TheSecondCoilOfBahamutTurn1',
   zoneId: ZoneId.TheSecondCoilOfBahamutTurn1,
   timelineFile: 't6.txt',
   triggers: [
@@ -6,7 +7,7 @@ Options.Triggers.push({
       id: 'T6 Phase 2',
       type: 'Ability',
       // Bloody Caress.
-      netRegex: NetRegexes.ability({ id: '797', source: 'Rafflesia' }),
+      netRegex: { id: '797', source: 'Rafflesia' },
       condition: (data) => !data.beganMonitoringHp,
       preRun: (data) => data.beganMonitoringHp = true,
       promise: (_data, matches) =>
@@ -22,32 +23,29 @@ Options.Triggers.push({
     {
       id: 'T6 Thorn Whip Collect',
       type: 'Tether',
-      netRegex: NetRegexes.tether({ id: '0012' }),
+      netRegex: { id: '0012' },
       run: (data, matches) => {
-        let _a;
-        let _b;
-        let _c;
-        let _d;
-        data.thornMap ?? (data.thornMap = {});
-        ((_a = data.thornMap)[_b = matches.source] ?? (_a[_b] = [])).push(matches.target);
-        ((_c = data.thornMap)[_d = matches.target] ?? (_c[_d] = [])).push(matches.source);
+        data.thornMap ??= {};
+        (data.thornMap[matches.source] ??= []).push(matches.target);
+        (data.thornMap[matches.target] ??= []).push(matches.source);
       },
     },
     {
       id: 'T6 Thorn Whip',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '879', source: 'Rafflesia' }),
+      netRegex: { id: '879', source: 'Rafflesia' },
       condition: Conditions.targetIsYou(),
       infoText: (data, _matches, output) => {
         const partners = data.thornMap?.[data.me] ?? [];
+        const [partner1, partner2] = partners;
         if (partners.length === 0)
           return output.thornsOnYou();
-        if (partners.length === 1)
-          return output.oneTether({ player: data.ShortName(partners[0]) });
-        if (partners.length === 2) {
+        if (partners.length === 1 && partner1 !== undefined)
+          return output.oneTether({ player: data.party.member(partner1) });
+        if (partners.length === 2 && partner1 !== undefined && partner2 !== undefined) {
           return output.twoTethers({
-            player1: data.ShortName(partners[0]),
-            player2: data.ShortName(partners[1]),
+            player1: data.party.member(partner1),
+            player2: data.party.member(partner2),
           });
         }
         return output.threeOrMoreTethers({ num: partners.length });
@@ -60,6 +58,7 @@ Options.Triggers.push({
           fr: 'Ronces sur VOUS',
           ja: '自分にソーンウィップ',
           cn: '荆棘点名',
+          ko: '가시 대상자',
         },
         oneTether: {
           en: 'Thorns w/ (${player})',
@@ -67,6 +66,7 @@ Options.Triggers.push({
           fr: 'Ronces avec (${player})',
           ja: '自分と (${player}) にソーンウィップ',
           cn: '荆棘与(${player})',
+          ko: '가시 대상자 (${player})',
         },
         twoTethers: {
           en: 'Thorns w/ (${player1}, ${player2})',
@@ -74,6 +74,7 @@ Options.Triggers.push({
           fr: 'Ronces avec (${player1}, ${player2})',
           ja: '自分と (${player1}, ${player2}) にソーンウィップ',
           cn: '荆棘与(${player1}, ${player2})',
+          ko: '가시 대상자 (${player1}, ${player2})',
         },
         threeOrMoreTethers: {
           en: 'Thorns (${num} people)',
@@ -81,6 +82,7 @@ Options.Triggers.push({
           fr: 'Ronces (${num} personne)',
           ja: 'ソーンウィップ (${num}人)',
           cn: '荆棘(${num} people)',
+          ko: '가시 (${num}명)',
         },
       },
     },
@@ -88,21 +90,21 @@ Options.Triggers.push({
       // Honey-Glazed
       id: 'T6 Honey On',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '1BE' }),
+      netRegex: { effectId: '1BE' },
       condition: Conditions.targetIsYou(),
       run: (data) => data.honey = true,
     },
     {
       id: 'T6 Honey Off',
       type: 'LosesEffect',
-      netRegex: NetRegexes.losesEffect({ effectId: '1BE' }),
+      netRegex: { effectId: '1BE' },
       condition: Conditions.targetIsYou(),
       run: (data) => delete data.honey,
     },
     {
       id: 'T6 Flower',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '000D' }),
+      netRegex: { id: '000D' },
       alarmText: (data, _matches, output) => {
         if (data.honey)
           return output.getEaten();
@@ -125,6 +127,7 @@ Options.Triggers.push({
           fr: 'Évitez Dévoration',
           ja: '捕食を避ける',
           cn: '躲开吞食',
+          ko: '포식 피하기',
         },
         jumpInNewThorns: {
           en: 'Devour: Jump In New Thorns',
@@ -132,6 +135,7 @@ Options.Triggers.push({
           fr: 'Dévoration : Sautez dans les ronces',
           ja: '捕食: 新芽に乗る',
           cn: '去新荆棘',
+          ko: '포식: 가시장판 밟기',
         },
         getEaten: {
           en: 'Devour: Get Eaten',
@@ -139,19 +143,20 @@ Options.Triggers.push({
           fr: 'Dévoration : Faites-vous manger',
           ja: '捕食: 捕食される',
           cn: '捕食点名',
+          ko: '포식: 잡아먹히기',
         },
       },
     },
     {
       id: 'T6 Blighted',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '79D', source: 'Rafflesia', capture: false }),
+      netRegex: { id: '79D', source: 'Rafflesia', capture: false },
       response: Responses.stopEverything(),
     },
     {
       id: 'T6 Phase 3',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '79E', source: 'Rafflesia', capture: false }),
+      netRegex: { id: '79E', source: 'Rafflesia', capture: false },
       condition: (data) => !data.seenLeafstorm,
       sound: 'Long',
       run: (data) => data.seenLeafstorm = true,
@@ -159,7 +164,7 @@ Options.Triggers.push({
     {
       id: 'T6 Swarm Stack',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '86C', source: 'Rafflesia', capture: false }),
+      netRegex: { id: '86C', source: 'Rafflesia', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -168,21 +173,23 @@ Options.Triggers.push({
           fr: 'Packez-vous pour Pluie acide',
           ja: '集合、アシッドレインを誘導',
           cn: '集合引导酸雨',
+          ko: '모여서 산성비 장판 유도',
         },
       },
     },
     {
       id: 'T6 Swarm',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '7A0', source: 'Rafflesia' }),
-      condition: (data, matches) => data.me === matches.target || data.role === 'healer' || data.job === 'BLU',
+      netRegex: { id: '7A0', source: 'Rafflesia' },
+      condition: (data, matches) =>
+        data.me === matches.target || data.role === 'healer' || data.job === 'BLU',
       alertText: (data, matches, output) => {
         if (matches.target === data.me)
           return output.swarmOnYou();
       },
       infoText: (data, matches, output) => {
         if (matches.target !== data.me)
-          return output.swarmOn({ player: data.ShortName(matches.target) });
+          return output.swarmOn({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         swarmOn: {
@@ -191,6 +198,7 @@ Options.Triggers.push({
           fr: 'Nuée sur ${player}',
           ja: '${player}にスウォーム',
           cn: '蜂群点${player}',
+          ko: '${player} 벌레',
         },
         swarmOnYou: {
           en: 'Swarm on YOU',
@@ -198,17 +206,18 @@ Options.Triggers.push({
           fr: 'Nuée sur VOUS',
           ja: '自分にスウォーム',
           cn: '蜂群点名',
+          ko: '벌레 대상자',
         },
       },
     },
     {
       id: 'T6 Rotten Stench',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '000E' }),
+      netRegex: { id: '000E' },
       alertText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.shareLaserOnYou();
-        return output.shareLaserOn({ player: data.ShortName(matches.target) });
+        return output.shareLaserOn({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         shareLaserOnYou: {
@@ -217,6 +226,7 @@ Options.Triggers.push({
           fr: 'Partagez le laser (sur VOUS)',
           ja: '(自分に)頭割りレーザー',
           cn: '分摊激光点名',
+          ko: '직선 쉐어 대상자',
         },
         shareLaserOn: {
           en: 'Share Laser (on ${player})',
@@ -224,6 +234,7 @@ Options.Triggers.push({
           fr: 'Partage de laser (sur ${player})',
           ja: '(${player})に頭割りレーザー',
           cn: '分摊激光点(on ${player})',
+          ko: '${player} 직선 쉐어',
         },
       },
     },

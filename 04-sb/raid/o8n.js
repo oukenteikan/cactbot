@@ -1,37 +1,38 @@
 // O8N - Sigmascape 4.0 Normal
 Options.Triggers.push({
+  id: 'SigmascapeV40',
   zoneId: ZoneId.SigmascapeV40,
   timelineFile: 'o8n.txt',
   triggers: [
     {
       id: 'O8N Hyper Drive',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '292E', source: 'Kefka' }),
+      netRegex: { id: '292E', source: 'Kefka' },
       response: Responses.tankBuster(),
     },
     {
       id: 'O8N Shockwave',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2927', source: 'Graven Image', capture: false }),
+      netRegex: { id: '2927', source: 'Graven Image', capture: false },
       delaySeconds: 5,
       response: Responses.knockback(),
     },
     {
       id: 'O8N Gravitational Wave',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2929', source: 'Graven Image', capture: false }),
+      netRegex: { id: '2929', source: 'Graven Image', capture: false },
       response: Responses.goEast(),
     },
     {
       id: 'O8N Intemperate Will',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '292A', source: 'Graven Image', capture: false }),
+      netRegex: { id: '292A', source: 'Graven Image', capture: false },
       response: Responses.goWest(),
     },
     {
       id: 'O8N Ave Maria',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '292B', source: 'Graven Image', capture: false }),
+      netRegex: { id: '292B', source: 'Graven Image', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -47,7 +48,7 @@ Options.Triggers.push({
     {
       id: 'O8N Indolent Will',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '292C', source: 'Graven Image', capture: false }),
+      netRegex: { id: '292C', source: 'Graven Image', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -63,7 +64,7 @@ Options.Triggers.push({
     {
       id: 'O8N Timely Teleport',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2921', source: 'Kefka', capture: false }),
+      netRegex: { id: '2921', source: 'Kefka', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -78,13 +79,13 @@ Options.Triggers.push({
     {
       id: 'O8N Aero Assault',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2924', source: 'Kefka', capture: false }),
+      netRegex: { id: '2924', source: 'Kefka', capture: false },
       response: Responses.knockback(),
     },
     {
       id: 'O8N Flagrant Fire Single',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0017' }),
+      netRegex: { id: '0017' },
       condition: Conditions.targetIsYou(),
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -101,13 +102,13 @@ Options.Triggers.push({
     {
       id: 'O8N Flagrant Fire Stack',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '003E' }),
+      netRegex: { id: '003E' },
       response: Responses.stackMarkerOn(),
     },
     {
       id: 'O8N Thrumming Thunder Real',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '291D', source: 'Kefka', capture: false }),
+      netRegex: { id: '291D', source: 'Kefka', capture: false },
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -124,7 +125,7 @@ Options.Triggers.push({
     {
       id: 'O8N Thrumming Thunder Fake',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '291B', source: 'Kefka', capture: false }),
+      netRegex: { id: '291B', source: 'Kefka', capture: false },
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -141,7 +142,7 @@ Options.Triggers.push({
     {
       id: 'O8N Blizzard Fake Donut',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2916', source: 'Kefka', capture: false }),
+      netRegex: { id: '2916', source: 'Kefka', capture: false },
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -158,7 +159,7 @@ Options.Triggers.push({
     {
       id: 'O8N Blizzard True Donut',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2919', source: 'Kefka', capture: false }),
+      netRegex: { id: '2919', source: 'Kefka', capture: false },
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -175,7 +176,7 @@ Options.Triggers.push({
     {
       id: 'O8N Blizzard Fake Near',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2914', source: 'Kefka', capture: false }),
+      netRegex: { id: '2914', source: 'Kefka', capture: false },
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -192,7 +193,7 @@ Options.Triggers.push({
     {
       id: 'O8N Blizzard True Near',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2918', source: 'Kefka', capture: false }),
+      netRegex: { id: '2918', source: 'Kefka', capture: false },
       suppressSeconds: 1,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -209,7 +210,7 @@ Options.Triggers.push({
     {
       id: 'O8N Ultima Upsurge',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '292D', source: 'Kefka', capture: false }),
+      netRegex: { id: '292D', source: 'Kefka', capture: false },
       response: Responses.aoe(),
     },
   ],
@@ -217,7 +218,8 @@ Options.Triggers.push({
     {
       'locale': 'de',
       'replaceSync': {
-        'Destroy! Destroy! Destroy! I will destroy it all!': 'Nichts wird mir standhalten, nichts! Alles will ich vernichten!',
+        'Destroy! Destroy! Destroy! I will destroy it all!':
+          'Nichts wird mir standhalten, nichts! Alles will ich vernichten!',
         'Graven Image': 'heilig(?:e|er|es|en) Statue',
         'Kefka': 'Kefka',
       },
@@ -241,7 +243,8 @@ Options.Triggers.push({
       'locale': 'fr',
       'replaceSync': {
         'Graven Image': 'Statue divine',
-        'Destroy! Destroy! Destroy! I will destroy it all!': 'Je détruirai le monde entier ! Plus personne ne pourra rêver !',
+        'Destroy! Destroy! Destroy! I will destroy it all!':
+          'Je détruirai le monde entier ! Plus personne ne pourra rêver !',
         'Kefka': 'Kefka',
       },
       'replaceText': {
@@ -263,7 +266,8 @@ Options.Triggers.push({
     {
       'locale': 'ja',
       'replaceSync': {
-        'Destroy! Destroy! Destroy! I will destroy it all!': 'どれもこれもゼ～ンブ、ハカイ、ハカイ、ハカイ！\\s*ゼ～ンブ、ハカイだ！！',
+        'Destroy! Destroy! Destroy! I will destroy it all!':
+          'どれもこれもゼ～ンブ、ハカイ、ハカイ、ハカイ！\\s*ゼ～ンブ、ハカイだ！！',
         'Graven Image': '神々の像',
         'Kefka': 'ケフカ',
       },

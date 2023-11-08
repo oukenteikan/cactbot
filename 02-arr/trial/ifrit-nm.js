@@ -1,4 +1,5 @@
 Options.Triggers.push({
+  id: 'TheBowlOfEmbers',
   zoneId: ZoneId.TheBowlOfEmbers,
   timelineFile: 'ifrit-nm.txt',
   timelineTriggers: [
@@ -38,7 +39,8 @@ Options.Triggers.push({
       'replaceSync': {
         'Ifrit': 'Ifrit',
         'Succumb to the inferno': 'Verglühe zu Asche im heiligen Inferno!',
-        'Surrender thyself to the fires of judgment': 'Die Flammen werden das Fleisch von deinen Knochen sengen ...',
+        'Surrender thyself to the fires of judgment':
+          'Die Flammen werden das Fleisch von deinen Knochen sengen ...',
       },
       'replaceText': {
         'Eruption': 'Eruption',

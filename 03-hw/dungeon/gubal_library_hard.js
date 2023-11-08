@@ -1,5 +1,6 @@
 // The Great Gubal Library--Hard
 Options.Triggers.push({
+  id: 'TheGreatGubalLibraryHard',
   zoneId: ZoneId.TheGreatGubalLibraryHard,
   timelineFile: 'gubal_library_hard.txt',
   timelineTriggers: [
@@ -26,16 +27,16 @@ Options.Triggers.push({
     {
       id: 'Gubal Hard Bibliocide',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1945', source: 'Liquid Flame', capture: false }),
+      netRegex: { id: '1945', source: 'Liquid Flame', capture: false },
       response: Responses.aoe(),
     },
     {
       id: 'Gubal Hard Ferrofluid',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: ['0030', '0031'] }),
-      condition: (data, matches) => data.me === matches.target || matches.targetId.slice(0, 1) === '4',
+      netRegex: { id: ['0030', '0031'] },
+      condition: (data, matches) => data.me === matches.target || matches.targetId.startsWith('4'),
       preRun: (data, matches) => {
-        data.markers ?? (data.markers = []);
+        data.markers ??= [];
         data.markers.push(matches.id);
       },
       infoText: (data, _matches, output) => {
@@ -69,7 +70,7 @@ Options.Triggers.push({
     {
       id: 'Gubal Hard Slosh',
       type: 'Tether',
-      netRegex: NetRegexes.tether({ id: '0039', source: 'Liquid Flame' }),
+      netRegex: { id: '0039', source: 'Liquid Flame' },
       condition: Conditions.targetIsYou(),
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -86,7 +87,7 @@ Options.Triggers.push({
     {
       id: 'Gubal Hard Sunseal',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '46F' }),
+      netRegex: { effectId: '46F' },
       condition: Conditions.targetIsYou(),
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -103,7 +104,7 @@ Options.Triggers.push({
     {
       id: 'Gubal Hard Moonseal',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '470' }),
+      netRegex: { effectId: '470' },
       condition: Conditions.targetIsYou(),
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -121,7 +122,7 @@ Options.Triggers.push({
       // This inflicts a vulnerability stack on the tank if not interrupted
       id: 'Gubal Hard Condensed Libra',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '198D', source: 'Mechanoscribe', capture: false }),
+      netRegex: { id: '198D', source: 'Mechanoscribe', capture: false },
       infoText: (data, _matches, output) => {
         if (data.CanSilence())
           return output.interruptMechanoscribe();
@@ -150,7 +151,7 @@ Options.Triggers.push({
     {
       id: 'Gubal Hard Properties of Quakes',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1956', source: 'Strix', capture: false }),
+      netRegex: { id: '1956', source: 'Strix', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -166,7 +167,7 @@ Options.Triggers.push({
     {
       id: 'Gubal Hard Properties of Tornadoes',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1957', source: 'Strix', capture: false }),
+      netRegex: { id: '1957', source: 'Strix', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -182,7 +183,7 @@ Options.Triggers.push({
     {
       id: 'Gubal Hard Properties of Imps',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1959', source: 'Strix', capture: false }),
+      netRegex: { id: '1959', source: 'Strix', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -198,19 +199,19 @@ Options.Triggers.push({
     {
       id: 'Gubal Hard Properties of Thunder',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '195A', source: 'Strix', capture: false }),
+      netRegex: { id: '195A', source: 'Strix', capture: false },
       response: Responses.spread(),
     },
     {
       id: 'Gubal Hard Properties of Darkness II',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1955', source: 'Strix', capture: false }),
+      netRegex: { id: '1955', source: 'Strix', capture: false },
       response: Responses.aoe(),
     },
     {
       id: 'Gubal Hard Ecliptic Meteor',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '195D', source: 'Behemoth Ward', capture: false }),
+      netRegex: { id: '195D', source: 'Behemoth Ward', capture: false },
       delaySeconds: 14,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {

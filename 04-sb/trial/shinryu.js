@@ -1,17 +1,18 @@
 // Shinryu Normal
 Options.Triggers.push({
+  id: 'TheRoyalMenagerie',
   zoneId: ZoneId.TheRoyalMenagerie,
   timelineFile: 'shinryu.txt',
   triggers: [
     {
       id: 'Shinryu Normal Akh Morn',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1FA4', source: 'Shinryu' }),
+      netRegex: { id: '1FA4', source: 'Shinryu' },
       alertText: (data, matches, output) => {
         if (matches.target === data.me)
           return output.akhMornOnYou();
         else if (data.role === 'tank')
-          return output.akhMornOn({ player: data.ShortName(matches.target) });
+          return output.akhMornOn({ player: data.party.member(matches.target) });
       },
       infoText: (data, matches, output) => {
         // Nobody with Akh Morn is a direct target for Akh Rai,
@@ -51,7 +52,7 @@ Options.Triggers.push({
     {
       id: 'Shinryu Normal Diamond Dust',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1FAD', source: 'Shinryu' }),
+      netRegex: { id: '1FAD', source: 'Shinryu' },
       // Here and elsewhere, timings aren't always completely usable. Instead we give the user
       // a quasi-standard amount of time when notifying.
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 4,
@@ -60,7 +61,7 @@ Options.Triggers.push({
     {
       id: 'Shinryu Normal Dragonfist',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '24EF', source: 'Shinryu', capture: false }),
+      netRegex: { id: '24EF', source: 'Shinryu', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -76,7 +77,7 @@ Options.Triggers.push({
     {
       id: 'Shinryu Normal Hellfire',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1FAB', source: 'Shinryu', capture: false }),
+      netRegex: { id: '1FAB', source: 'Shinryu', capture: false },
       durationSeconds: 7,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -93,7 +94,7 @@ Options.Triggers.push({
     {
       id: 'Shinryu Normal Hypernova',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['1F99', '1F9A'], source: 'Right Wing', capture: false }),
+      netRegex: { id: ['1F99', '1F9A'], source: 'Right Wing', capture: false },
       durationSeconds: 7,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -110,7 +111,7 @@ Options.Triggers.push({
     {
       id: 'Shinryu Normal Judgement Bolt',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1FAC', source: 'Shinryu', capture: false }),
+      netRegex: { id: '1FAC', source: 'Shinryu', capture: false },
       durationSeconds: 7,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -127,7 +128,7 @@ Options.Triggers.push({
     {
       id: 'Shinryu Normal Levinbolt',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1F9B', source: 'Right Wing', capture: false }),
+      netRegex: { id: '1F9B', source: 'Right Wing', capture: false },
       durationSeconds: 7,
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -144,7 +145,7 @@ Options.Triggers.push({
     {
       id: 'Shinryu Normal Tidal Wave',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1FAA', source: 'Shinryu' }),
+      netRegex: { id: '1FAA', source: 'Shinryu' },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 6,
       durationSeconds: 5,
       infoText: (_data, _matches, output) => output.text(),
@@ -162,14 +163,14 @@ Options.Triggers.push({
     {
       id: 'Shinryu Normal Ice Storm',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1FA2', source: 'Left Wing' }),
+      netRegex: { id: '1FA2', source: 'Left Wing' },
       delaySeconds: (_data, matches) => parseFloat(matches.castTime) - 4,
       response: Responses.aoe(),
     },
     {
       id: 'Shinryu Normal Tail Slap',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1F93', source: 'Tail', capture: false }),
+      netRegex: { id: '1F93', source: 'Tail', capture: false },
       delaySeconds: 2,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -187,14 +188,14 @@ Options.Triggers.push({
       // Re-using the Gyre Charge triggers since they're convenient and already translated.
       id: 'Shinryu Normal Akh Rai Activation',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1FF4', source: 'Shinryu', capture: false }),
+      netRegex: { id: '1FF4', source: 'Shinryu', capture: false },
       condition: (data) => !data.finalPhase,
       run: (data) => data.finalPhase = true,
     },
     {
       id: 'Shinryu Normal Divebomb',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1FF4', source: 'Shinryu', capture: false }),
+      netRegex: { id: '1FF4', source: 'Shinryu', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -210,7 +211,7 @@ Options.Triggers.push({
     {
       id: 'Shinryu Normal Tethers',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0061' }),
+      netRegex: { id: '0061' },
       condition: Conditions.targetIsYou(),
       delaySeconds: 3.8,
       response: Responses.breakChains(),
@@ -221,7 +222,7 @@ Options.Triggers.push({
       // However, it *seems* that the tail attacks from the side the target is on.
       id: 'Shinryu Normal Slap Marker',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0062' }),
+      netRegex: { id: '0062' },
       condition: Conditions.targetIsYou(),
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {

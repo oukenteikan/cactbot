@@ -22,7 +22,7 @@ const boundOfFaithFireTetherResponse = (data, _matches, output) => {
     return { alertText: output.stackOnYou() };
   if (targets.length === 0)
     return { alertText: output.stackOnPlayer({ player: output.unknownTarget() }) };
-  return { alertText: output.stackOnPlayer({ player: data.ShortName(targets[0]) }) };
+  return { alertText: output.stackOnPlayer({ player: data.party.member(targets[0]) }) };
 };
 const boundOfFaithLightningTetherResponse = (data, _matches, output) => {
   // cactbot-builtin-response
@@ -48,7 +48,7 @@ const boundOfFaithLightningTetherResponse = (data, _matches, output) => {
   const targets = Object.keys(data.tethers || {});
   if (targets.includes(data.me))
     return { alarmText: output.onYou() };
-  const target = targets.length === 1 ? data.ShortName(targets[0]) : output.unknownTarget();
+  const target = targets.length === 1 ? data.party.member(targets[0]) : output.unknownTarget();
   return { infoText: output.tetherInfo({ player: target }) };
 };
 const boundOfFaithHolyTetherResponse = (data, _matches, output) => {
@@ -63,28 +63,29 @@ const boundOfFaithHolyTetherResponse = (data, _matches, output) => {
     return { alarmText: output.awayFromGroup() };
   if (targets.length === 0)
     return { infoText: output.awayFromPlayer({ player: output.unknownTarget() }) };
-  return { infoText: output.awayFromPlayer({ player: data.ShortName(targets[0]) }) };
+  return { infoText: output.awayFromPlayer({ player: data.party.member(targets[0]) }) };
 };
 Options.Triggers.push({
+  id: 'EdensPromiseAnamorphosis',
   zoneId: ZoneId.EdensPromiseAnamorphosis,
   timelineFile: 'e11n.txt',
   triggers: [
     {
       id: 'E11N Burnished Glory',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Fatebreaker', id: '5650', capture: false }),
+      netRegex: { source: 'Fatebreaker', id: '5650', capture: false },
       response: Responses.aoe(),
     },
     {
       id: 'E11N Powder Mark',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Fatebreaker', id: '564E' }),
+      netRegex: { source: 'Fatebreaker', id: '564E' },
       response: Responses.tankBuster(),
     },
     {
       id: 'E11N Powder Mark Explosion',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ source: 'Fatebreaker', effectId: '993' }),
+      netRegex: { source: 'Fatebreaker', effectId: '993' },
       condition: Conditions.targetIsYou(),
       delaySeconds: (_data, matches) => parseFloat(matches.duration) - 4,
       alertText: (_data, _matches, output) => output.awayFromGroup(),
@@ -95,7 +96,7 @@ Options.Triggers.push({
     {
       id: 'E11N Burnt Strike Fire',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Fatebreaker', id: '562C', capture: false }),
+      netRegex: { source: 'Fatebreaker', id: '562C', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -111,7 +112,7 @@ Options.Triggers.push({
     {
       id: 'E11N Burnt Strike Lightning',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Fatebreaker', id: '562E', capture: false }),
+      netRegex: { source: 'Fatebreaker', id: '562E', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -127,7 +128,7 @@ Options.Triggers.push({
     {
       id: 'E11N Burnt Strike Holy',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Fatebreaker', id: '5630', capture: false }),
+      netRegex: { source: 'Fatebreaker', id: '5630', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -143,7 +144,7 @@ Options.Triggers.push({
     {
       id: 'E11N Burnt Strike Lightning Clone',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Fatebreaker\'s Image', id: '5645', capture: false }),
+      netRegex: { source: 'Fatebreaker\'s Image', id: '5645', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -159,7 +160,7 @@ Options.Triggers.push({
     {
       id: 'E11N Burnt Strike Fire Clone',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Fatebreaker\'s Image', id: '5643', capture: false }),
+      netRegex: { source: 'Fatebreaker\'s Image', id: '5643', capture: false },
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -175,41 +176,41 @@ Options.Triggers.push({
     {
       id: 'E11N Bound Of Faith Tether Collector',
       type: 'Tether',
-      netRegex: NetRegexes.tether({ id: tetherIds }),
+      netRegex: { id: tetherIds },
       run: (data, matches) => {
-        data.tethers ?? (data.tethers = {});
+        data.tethers ??= {};
         data.tethers[matches.target] = matches.sourceId;
       },
     },
     {
       id: 'E11N Bound Of Faith Tether Collector Cleanup',
       type: 'Tether',
-      netRegex: NetRegexes.tether({ id: tetherIds, capture: false }),
+      netRegex: { id: tetherIds, capture: false },
       delaySeconds: 20,
       run: (data) => delete data.tethers,
     },
     {
       id: 'E11N Bound Of Faith Fire',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Fatebreaker', id: '4B18', capture: false }),
+      netRegex: { source: 'Fatebreaker', id: '4B18', capture: false },
       response: boundOfFaithFireTetherResponse,
     },
     {
       id: 'E11N Bound Of Faith Lightning',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Fatebreaker', id: '4B19', capture: false }),
+      netRegex: { source: 'Fatebreaker', id: '4B19', capture: false },
       response: boundOfFaithLightningTetherResponse,
     },
     {
       id: 'E11N Bound Of Faith Holy',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Fatebreaker', id: '4B1B', capture: false }),
+      netRegex: { source: 'Fatebreaker', id: '4B1B', capture: false },
       response: boundOfFaithHolyTetherResponse,
     },
     {
       id: 'E11N Turn of the Heavens Fire',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Fatebreaker', id: '5639', capture: false }),
+      netRegex: { source: 'Fatebreaker', id: '5639', capture: false },
       durationSeconds: 10,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -226,7 +227,7 @@ Options.Triggers.push({
     {
       id: 'E11N Turn of the Heavens Lightning',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ source: 'Fatebreaker', id: '563A', capture: false }),
+      netRegex: { source: 'Fatebreaker', id: '563A', capture: false },
       durationSeconds: 10,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {

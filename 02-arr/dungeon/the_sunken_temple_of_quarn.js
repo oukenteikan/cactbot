@@ -1,10 +1,11 @@
 Options.Triggers.push({
+  id: 'TheSunkenTempleOfQarn',
   zoneId: ZoneId.TheSunkenTempleOfQarn,
   triggers: [
     {
       id: 'Sunken Quarn Doom',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: 'D2' }),
+      netRegex: { effectId: 'D2' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {

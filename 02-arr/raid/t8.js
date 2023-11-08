@@ -1,4 +1,5 @@
 Options.Triggers.push({
+  id: 'TheSecondCoilOfBahamutTurn3',
   zoneId: ZoneId.TheSecondCoilOfBahamutTurn3,
   timelineFile: 't8.txt',
   initData: () => {
@@ -10,13 +11,17 @@ Options.Triggers.push({
     {
       id: 'T8 Stack',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0011' }),
+      netRegex: { id: '0011' },
       response: Responses.stackMarkerOn('info'),
     },
     {
       id: 'T8 Landmine Start',
       type: 'GameLog',
-      netRegex: NetRegexes.message({ line: 'Landmines have been scattered.*?', capture: false }),
+      netRegex: {
+        line: 'Landmines have been scattered.*?',
+        code: Util.gameLogCodes.message,
+        capture: false,
+      },
       alertText: (_data, _matches, output) => output.text(),
       run: (data) => data.landmines = {},
       outputStrings: {
@@ -33,7 +38,7 @@ Options.Triggers.push({
     {
       id: 'T8 Landmine Explosion',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '7D1', source: 'Allagan Mine' }),
+      netRegex: { id: '7D1', source: 'Allagan Mine' },
       infoText: (data, matches, output) => {
         if (matches.target in data.landmines)
           return;
@@ -72,10 +77,10 @@ Options.Triggers.push({
     {
       id: 'T8 Homing Missile Warning',
       type: 'Tether',
-      netRegex: NetRegexes.tether({ id: '0005', target: 'The Avatar' }),
+      netRegex: { id: '0005', target: 'The Avatar' },
       suppressSeconds: 6,
       infoText: (data, matches, output) => {
-        return output.text({ player: data.ShortName(matches.source) });
+        return output.text({ player: data.party.member(matches.source) });
       },
       outputStrings: {
         text: {
@@ -91,14 +96,14 @@ Options.Triggers.push({
     {
       id: 'T8 Brainjack',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7C3', source: 'The Avatar' }),
+      netRegex: { id: '7C3', source: 'The Avatar' },
       alertText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.brainjackOnYou();
       },
       infoText: (data, matches, output) => {
         if (data.me !== matches.target)
-          return output.brainjackOn({ player: data.ShortName(matches.target) });
+          return output.brainjackOn({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         brainjackOn: {
@@ -122,14 +127,14 @@ Options.Triggers.push({
     {
       id: 'T8 Allagan Field',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '7C4', source: 'The Avatar' }),
+      netRegex: { id: '7C4', source: 'The Avatar' },
       alertText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.allaganFieldOnYou();
       },
       infoText: (data, matches, output) => {
         if (data.me !== matches.target)
-          return output.allaganFieldOn({ player: data.ShortName(matches.target) });
+          return output.allaganFieldOn({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         allaganFieldOn: {
@@ -153,7 +158,7 @@ Options.Triggers.push({
     {
       id: 'T8 Dreadnaught',
       type: 'AddedCombatant',
-      netRegex: NetRegexes.addedCombatant({ name: 'Clockwork Dreadnaught', capture: false }),
+      netRegex: { name: 'Clockwork Dreadnaught', capture: false },
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {

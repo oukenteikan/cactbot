@@ -1,30 +1,31 @@
 Options.Triggers.push({
+  id: 'TheFinalCoilOfBahamutTurn1',
   zoneId: ZoneId.TheFinalCoilOfBahamutTurn1,
   timelineFile: 't10.txt',
   triggers: [
     {
       id: 'T10 Phase Change',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: 'B5D', source: 'Imdugud', capture: false }),
+      netRegex: { id: 'B5D', source: 'Imdugud', capture: false },
       sound: 'Long',
     },
     {
       id: 'T10 Heat Lightning',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: 'B5F', source: 'Imdugud', capture: false }),
+      netRegex: { id: 'B5F', source: 'Imdugud', capture: false },
       response: Responses.spread(),
     },
     {
       id: 'T10 Wild Charge',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '001F' }),
+      netRegex: { id: '001F' },
       alarmText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.chargeOnYou();
       },
       infoText: (data, matches, output) => {
         if (data.me !== matches.target)
-          return output.chargeOn({ player: data.ShortName(matches.target) });
+          return output.chargeOn({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         chargeOn: {
@@ -33,7 +34,7 @@ Options.Triggers.push({
           fr: 'Charge sur ${player}',
           ja: '${player}にワイルドチャージ',
           cn: '蓝球点${player}',
-          ko: '"${player}" 야성의 돌진 대상',
+          ko: '"${player}" 돌진 대상',
         },
         chargeOnYou: {
           en: 'Charge on YOU',
@@ -41,27 +42,27 @@ Options.Triggers.push({
           fr: 'Charge sur VOUS',
           ja: '自分にワイルドチャージ',
           cn: '蓝球点名',
-          ko: '야성의 돌진 대상자',
+          ko: '돌진 대상자',
         },
       },
     },
     {
       id: 'T10 Prey',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '001E' }),
+      netRegex: { id: '001E' },
       response: Responses.preyOn(),
     },
     {
       id: 'T10 Cyclonic Tether',
       type: 'Tether',
-      netRegex: NetRegexes.tether({ id: '0015', source: 'Imdugud' }),
+      netRegex: { id: '0015', source: 'Imdugud' },
       alarmText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.cyclonicOnYou();
       },
       infoText: (data, matches, output) => {
         if (data.me !== matches.target)
-          return output.cyclonicOn({ player: data.ShortName(matches.target) });
+          return output.cyclonicOn({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         cyclonicOn: {
@@ -70,6 +71,7 @@ Options.Triggers.push({
           fr: 'Chaos cyclonique sur ${player}',
           ja: '${player}にサイクロニックカオス',
           cn: '连线点${player}',
+          ko: '${player} 휘몰아치는 혼돈',
         },
         cyclonicOnYou: {
           en: 'Cyclonic on YOU',
@@ -77,6 +79,7 @@ Options.Triggers.push({
           fr: 'Chaos cyclonique sur VOUS',
           ja: '自分にサイクロニックカオス',
           cn: '连线点名',
+          ko: '휘몰아치는 혼돈 대상자',
         },
       },
     },

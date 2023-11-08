@@ -1,5 +1,6 @@
 // O12N - Alphascape 4.0
 Options.Triggers.push({
+  id: 'AlphascapeV40',
   zoneId: ZoneId.AlphascapeV40,
   timelineFile: 'o12n.txt',
   timelineTriggers: [
@@ -14,28 +15,28 @@ Options.Triggers.push({
     {
       id: 'O12N Solar Ray',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['330F', '3310'], source: ['Omega', 'Omega-M'] }),
+      netRegex: { id: ['330F', '3310'], source: ['Omega', 'Omega-M'] },
       suppressSeconds: 1,
       response: Responses.tankCleave('alert'),
     },
     {
       id: 'O12N Optimized Blade Dance',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['3321', '3322'], source: ['Omega', 'Omega-M'] }),
+      netRegex: { id: ['3321', '3322'], source: ['Omega', 'Omega-M'] },
       suppressSeconds: 1,
       response: Responses.tankBuster(),
     },
     {
       id: 'O12N Laser Shower',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['3311', '3312'], source: ['Omega', 'Omega-M'], capture: false }),
+      netRegex: { id: ['3311', '3312'], source: ['Omega', 'Omega-M'], capture: false },
       suppressSeconds: 1,
       response: Responses.aoe(),
     },
     {
       id: 'O12N Cosmo Memory',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: ['331C', '331D'], source: ['Omega', 'Omega-M'], capture: false }),
+      netRegex: { id: ['331C', '331D'], source: ['Omega', 'Omega-M'], capture: false },
       suppressSeconds: 1,
       response: Responses.bigAoe(),
     },
@@ -43,15 +44,15 @@ Options.Triggers.push({
       id: 'O12N Efficient Bladework',
       type: 'Ability',
       // 12.1 seconds after Subject Simulation M is an untelegraphed Efficient Bladework.
-      netRegex: NetRegexes.ability({ id: '32F4', source: 'Omega-M', capture: false }),
+      netRegex: { id: '32F4', source: 'Omega-M', capture: false },
       delaySeconds: 8,
       response: Responses.getOut(),
     },
     {
       id: 'O12N Local Resonance',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ target: 'Omega', effectId: '67E', capture: false }),
-      condition: (data) => data.role === 'tank',
+      netRegex: { target: 'Omega', effectId: '67E', capture: false },
+      condition: (data) => data.role === 'tank' || data.job === 'BLU',
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -67,14 +68,14 @@ Options.Triggers.push({
     {
       id: 'O12N Optimized Meteor',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0057' }),
+      netRegex: { id: '0057' },
       condition: Conditions.targetIsYou(),
       response: Responses.meteorOnYou(),
     },
     {
       id: 'O12N Ground Zero',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '008B' }),
+      netRegex: { id: '008B' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, _matches, output) => output.getOut(),
       run: (data, matches) => data.groundZero = matches.target,
@@ -92,7 +93,7 @@ Options.Triggers.push({
     {
       id: 'O12N Goo Instructions',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '008B', capture: false }),
+      netRegex: { id: '008B', capture: false },
       delaySeconds: 8,
       infoText: (_data, _matches, output) => output.text(),
       run: (data) => delete data.groundZero,
@@ -109,7 +110,7 @@ Options.Triggers.push({
     {
       id: 'O12N Stack Marker',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '003E' }),
+      netRegex: { id: '003E' },
       delaySeconds: 0.3,
       infoText: (data, matches, output) => {
         if (data.me === data.groundZero)
@@ -118,7 +119,7 @@ Options.Triggers.push({
         // since it's stack, but also get away from Ground Zero purple marker.
         if (data.me === matches.target)
           return output.stackOnYou();
-        return output.stackOnPlayer({ player: data.ShortName(matches.target) });
+        return output.stackOnPlayer({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         stackOnYou: Outputs.stackOnYou,
@@ -128,14 +129,14 @@ Options.Triggers.push({
     {
       id: 'O12N Optimized Fire III',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0060' }),
+      netRegex: { id: '0060' },
       condition: Conditions.targetIsYou(),
       response: Responses.spread(),
     },
     {
       id: 'O12N Packet Filter F',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '67D' }),
+      netRegex: { effectId: '67D' },
       condition: Conditions.targetIsYou(),
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -152,7 +153,7 @@ Options.Triggers.push({
     {
       id: 'O12N Packet Filter M',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '67C' }),
+      netRegex: { effectId: '67C' },
       condition: Conditions.targetIsYou(),
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -171,12 +172,14 @@ Options.Triggers.push({
     {
       'locale': 'de',
       'replaceSync': {
-        'Calculations indicate increased probability of defeat': 'Warnung. Erhöhte Wahrscheinlichkeit einer Niederlage',
+        'Calculations indicate increased probability of defeat':
+          'Warnung. Erhöhte Wahrscheinlichkeit einer Niederlage',
         'Omega(?!-)': 'Omega',
         'Omega-M': 'Omega-M',
         'Optical Unit': 'Optikmodul',
         'Progress to party combat': 'Initiiere Gruppenkampf',
-        '\\\\<blip\\\\> Warning\\\\\. Calculations indicate': '<biep> Warnung. Erhöhte Wahrscheinlichkeit',
+        '\\\\<blip\\\\> Warning\\\\\. Calculations indicate':
+          '<biep> Warnung. Erhöhte Wahrscheinlichkeit',
       },
       'replaceText': {
         'Beyond Strength': 'Schildkombo G',
@@ -210,8 +213,10 @@ Options.Triggers.push({
     {
       'locale': 'fr',
       'replaceSync': {
-        '\\\\<blip\\\\> Warning\\\\\. Calculations indicate': 'Alerte... Alerte... Forte augmentation',
-        'Calculations indicate increased probability of defeat': 'Forte augmentation des probabilités de défaite',
+        '\\\\<blip\\\\> Warning\\\\\. Calculations indicate':
+          'Alerte... Alerte... Forte augmentation',
+        'Calculations indicate increased probability of defeat':
+          'Forte augmentation des probabilités de défaite',
         'Omega(?!-)': 'Oméga',
         'Omega-M': 'Oméga-M',
         'Optical Unit': 'unité optique',

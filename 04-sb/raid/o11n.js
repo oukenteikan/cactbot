@@ -1,5 +1,6 @@
 // O11N - Alphascape 3.0
 Options.Triggers.push({
+  id: 'AlphascapeV30',
   zoneId: ZoneId.AlphascapeV30,
   timelineFile: 'o11n.txt',
   timelineTriggers: [
@@ -7,7 +8,7 @@ Options.Triggers.push({
       id: 'O11N Blaster',
       regex: /Blaster/,
       beforeSeconds: 3,
-      condition: (data) => data.role === 'tank',
+      condition: (data) => data.role === 'tank' || data.job === 'BLU',
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
@@ -25,13 +26,13 @@ Options.Triggers.push({
     {
       id: 'O11N Atomic Ray',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '3286', source: 'Omega', capture: false }),
+      netRegex: { id: '3286', source: 'Omega', capture: false },
       response: Responses.aoe(),
     },
     {
       id: 'O11N Mustard Bomb',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '3287', source: 'Omega' }),
+      netRegex: { id: '3287', source: 'Omega' },
       response: Responses.tankBuster('alarm'),
     },
     {
@@ -45,14 +46,14 @@ Options.Triggers.push({
       // will at least say left/right for the second.
       id: 'O11N Cannon Cleanup',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '328[13]', source: 'Omega', capture: false }),
+      netRegex: { id: '328[13]', source: 'Omega', capture: false },
       delaySeconds: 15,
       run: (data) => delete data.lastWasStarboard,
     },
     {
       id: 'O11N Starboard Cannon 1',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '328[12]', source: 'Omega', capture: false }),
+      netRegex: { id: '328[12]', source: 'Omega', capture: false },
       condition: (data) => data.lastWasStarboard === undefined,
       response: Responses.goLeft(),
       run: (data) => data.lastWasStarboard = true,
@@ -60,7 +61,7 @@ Options.Triggers.push({
     {
       id: 'O11N Larboard Cannon 1',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '328[34]', source: 'Omega', capture: false }),
+      netRegex: { id: '328[34]', source: 'Omega', capture: false },
       condition: (data) => data.lastWasStarboard === undefined,
       response: Responses.goRight(),
       run: (data) => data.lastWasStarboard = false,
@@ -68,7 +69,7 @@ Options.Triggers.push({
     {
       id: 'O11N Starboard Cannon 2',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '3282', source: 'Omega', capture: false }),
+      netRegex: { id: '3282', source: 'Omega', capture: false },
       condition: (data) => data.lastWasStarboard !== undefined,
       alertText: (data, _matches, output) => {
         if (data.lastWasStarboard)
@@ -97,7 +98,7 @@ Options.Triggers.push({
     {
       id: 'O11N Larboard Cannon 2',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '3284', source: 'Omega', capture: false }),
+      netRegex: { id: '3284', source: 'Omega', capture: false },
       condition: (data) => data.lastWasStarboard !== undefined,
       alertText: (data, _matches, output) => {
         if (data.lastWasStarboard)
@@ -126,7 +127,7 @@ Options.Triggers.push({
     {
       id: 'O11N Ballistic Missile',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0065' }),
+      netRegex: { id: '0065' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
@@ -142,13 +143,13 @@ Options.Triggers.push({
     {
       id: 'O11N Electric Slide',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '003E' }),
+      netRegex: { id: '003E' },
       response: Responses.stackMarkerOn(),
     },
     {
       id: 'O11N Delta Attack',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '327B', source: 'Omega', capture: false }),
+      netRegex: { id: '327B', source: 'Omega', capture: false },
       delaySeconds: 3,
       infoText: (_data, _matches, output) => output.text(),
       outputStrings: {

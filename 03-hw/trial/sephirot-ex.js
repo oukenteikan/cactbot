@@ -1,4 +1,5 @@
 Options.Triggers.push({
+  id: 'ContainmentBayS1T7Extreme',
   zoneId: ZoneId.ContainmentBayS1T7Extreme,
   timelineFile: 'sephirot-ex.txt',
   initData: () => {
@@ -12,7 +13,7 @@ Options.Triggers.push({
       id: 'SephirotEx Tiferet',
       regex: /Tiferet/,
       beforeSeconds: 4,
-      suppressSeconds: 2,
+      suppressSeconds: 5,
       response: Responses.aoe(),
     },
     {
@@ -37,7 +38,7 @@ Options.Triggers.push({
     {
       id: 'SephirotEx Ein Sof Ratzon',
       regex: /Ein Sof \(1 puddle\)/,
-      infoText: (_data, _matches, output) => output.text(),
+      alertText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
           en: 'Bait toward puddle',
@@ -87,7 +88,7 @@ Options.Triggers.push({
     {
       id: 'SephirotEx Main Tank',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '368', source: 'Sephirot' }),
+      netRegex: { id: '368', source: 'Sephirot' },
       // We make this conditional to avoid constant noise in the raid emulator.
       condition: (data, matches) => data.mainTank !== matches.target,
       run: (data, matches) => data.mainTank = matches.target,
@@ -95,26 +96,26 @@ Options.Triggers.push({
     {
       id: 'SephirotEx Chesed Buster',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1567', source: 'Sephirot' }),
+      netRegex: { id: '1567', source: 'Sephirot' },
       response: Responses.tankBuster(),
     },
     {
       id: 'SephirotEx Ain',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1569', source: 'Sephirot', capture: false }),
+      netRegex: { id: '1569', source: 'Sephirot', capture: false },
       response: Responses.getBehind(),
     },
     {
       id: 'SephirotEx Ratzon Spread',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: ['0046', '0047'] }),
+      netRegex: { id: ['0046', '0047'] },
       condition: Conditions.targetIsYou(),
       response: Responses.spread(),
     },
     {
       id: 'SephirotEx Fiendish Rage',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0048', capture: false }),
+      netRegex: { id: '0048', capture: false },
       condition: (data) => data.phase === 1,
       suppressSeconds: 10,
       alertText: (data, _matches, output) => {
@@ -140,35 +141,55 @@ Options.Triggers.push({
     {
       id: 'SephirotEx Da\'at Spread',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1572', source: 'Sephirot', capture: false }),
+      netRegex: { id: '1572', source: 'Sephirot', capture: false },
       response: Responses.spread(),
     },
     {
       id: 'SephirotEx Malkuth',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1582', source: 'Sephirot', capture: false }),
+      netRegex: { id: '1582', source: 'Sephirot', capture: false },
       response: Responses.knockback(),
     },
     {
       id: 'SephirotEx Yesod Move',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '157E', source: 'Sephirot', capture: false }),
+      netRegex: { id: '157E', source: 'Sephirot', capture: false },
+      suppressSeconds: 2,
       response: Responses.moveAway('alarm'), // This *will* kill if a non-tank takes 2+.
     },
     {
-      // 3ED is Force Against Might orange, 3EE is Force Against Magic, green.
-      id: 'SephirotEx Force Against Gain',
+      id: 'SephirotEx Force Against Might',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: ['3ED', '3EE'] }),
+      netRegex: { effectId: '3ED' },
       condition: Conditions.targetIsYou(),
       alertText: (_data, matches, output) => output.text({ force: matches.effect }),
       run: (data, matches) => data.force = matches.effectId,
       outputStrings: {
         text: {
-          en: '${force} on you',
-          de: '${force} auf dir',
-          cn: '${force}点名',
-          ko: '나에게 ${force}',
+          en: 'Orange (${force})',
+          de: 'Orange (${force})',
+          fr: '${force} Orange',
+          ja: '自分に${force}',
+          cn: '橙点名 ${force}',
+          ko: '노랑 (${force})',
+        },
+      },
+    },
+    {
+      id: 'SephirotEx Force Against Magic',
+      type: 'GainsEffect',
+      netRegex: { effectId: '3EE' },
+      condition: Conditions.targetIsYou(),
+      alertText: (_data, matches, output) => output.text({ force: matches.effect }),
+      run: (data, matches) => data.force = matches.effectId,
+      outputStrings: {
+        text: {
+          en: 'Green (${force})',
+          de: 'Grün (${force})',
+          fr: '${force} Vert',
+          ja: '自分に${force}',
+          cn: '绿点名 ${force}',
+          ko: '초록 (${force})',
         },
       },
     },
@@ -176,13 +197,13 @@ Options.Triggers.push({
       // Orange left, Green right. Match color to Force debuff.
       id: 'SephirotEx Gevurah Chesed',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1578', capture: false }),
+      netRegex: { id: '1578', capture: false },
       alertText: (data, _matches, output) => {
         // Here and for Chesed Gevurah, if the player doesn't have a color debuff,
         // they just take moderate AoE damage.
         // Unlike Flood of Naught (colors) in O4s,
         // standing center is safe if the user has no debuff.
-        if (data.force)
+        if (data.force !== undefined)
           return data.force === '3ED' ? output.left() : output.right();
         return output.aoe();
       },
@@ -196,9 +217,9 @@ Options.Triggers.push({
       // Green left, Orange right. Match color to Force debuff.
       id: 'SephirotEx Chesed Gevurah',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1579', capture: false }),
+      netRegex: { id: '1579', capture: false },
       alertText: (data, _matches, output) => {
-        if (data.force)
+        if (data.force !== undefined)
           return data.force === '3EE' ? output.left() : output.right();
         return output.aoe();
       },
@@ -211,9 +232,9 @@ Options.Triggers.push({
     {
       id: 'SephirotEx Fiendish Wail',
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '1575', source: 'Sephirot', capture: false }),
+      netRegex: { id: '1575', source: 'Sephirot', capture: false },
       alertText: (data, _matches, output) => {
-        if (data.force === '3ED' || (!data.force && data.role === 'tank'))
+        if (data.force === '3ED' || data.force === undefined && data.role === 'tank')
           return output.getTower();
         return output.avoidTower();
       },
@@ -235,7 +256,7 @@ Options.Triggers.push({
     {
       id: 'SephirotEx Da\'at Tethers',
       type: 'Tether',
-      netRegex: NetRegexes.tether({ id: '0030', capture: false }),
+      netRegex: { id: '0030', capture: false },
       suppressSeconds: 30,
       alertText: (data, _matches, output) => {
         if (data.force === '3EE')
@@ -253,30 +274,31 @@ Options.Triggers.push({
           en: 'Go Front; Get Tether',
           de: 'Geh nach Vorne; Nimm eine Verbindung',
           cn: '去前面; 接线',
-          ko: '앞으로 가서 선 가로채기',
+          ko: '앞으로 가서 선 가져가기',
         },
       },
     },
     {
       id: 'SephirotEx Force Against Lose',
       type: 'LosesEffect',
-      netRegex: NetRegexes.losesEffect({ effectId: ['3ED', '3EE'], capture: false }),
+      netRegex: { effectId: ['3ED', '3EE'], capture: false },
       run: (data) => delete data.force,
     },
     {
       id: 'SephirotEx Earth Shaker Collect',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0028' }),
+      netRegex: { id: '0028' },
       run: (data, matches) => {
-        data.shakerTargets = data.shakerTargets ?? (data.shakerTargets = []);
+        data.shakerTargets = data.shakerTargets ??= [];
         data.shakerTargets.push(matches.target);
       },
     },
     {
       id: 'SephirotEx Earth Shaker Call',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0028', capture: false }),
+      netRegex: { id: '0028', capture: false },
       delaySeconds: 0.5,
+      suppressSeconds: 1,
       alertText: (data, _matches, output) => {
         if (data.shakerTargets?.includes(data.me))
           return output.shakerTarget();
@@ -300,18 +322,18 @@ Options.Triggers.push({
     {
       id: 'SephirotEx Earth Shaker Cleanup',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '0028', capture: false }),
+      netRegex: { id: '0028', capture: false },
       delaySeconds: 5,
       run: (data) => delete data.shakerTargets,
     },
     {
       id: 'SephirotEx Storm of Words Revelation',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '1583', source: 'Storm of Words', capture: false }),
+      netRegex: { id: '1583', source: 'Storm of Words', capture: false },
       alarmText: (_data, _matches, output) => output.text(),
       outputStrings: {
         text: {
-          en: 'Kill Storm of Words or die',
+          en: 'Kill Storm of Words',
           de: 'Wörtersturm besiegen',
           fr: 'Tuez Tempête de mots ou mourrez',
           cn: '击杀言语风暴!',
@@ -322,7 +344,7 @@ Options.Triggers.push({
     {
       id: 'SephirotEx Ascension',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '003E', capture: false }),
+      netRegex: { id: '003E', capture: false },
       response: Responses.stackMarker(),
     },
   ],
@@ -337,6 +359,8 @@ Options.Triggers.push({
       'replaceText': {
         'Tethers': 'Verbindungen',
         'spread': 'verteilen',
+        'puddles': 'Flächen',
+        'puddle(?!s)': 'Fläche',
         'Adds Spawn': 'Adds erscheinen',
         'Ascension': 'Himmelfahrt',
         'Chesed': 'Chesed',
@@ -467,10 +491,13 @@ Options.Triggers.push({
         'puddle(?:s)?': '장판',
         'Adds Spawn': '쫄 등장',
         'Ascension': '승천',
-        'Chesed': '헤세드',
-        'Da\'at': '다아트',
+        'Chesed(?! Gevurah)': '헤세드',
+        'Chesed Gevurah': '헤세드 게부라',
+        'Da\'at spread': '다아트 산개',
+        'Da\'at Tethers': '다아트 선',
         'Earth Shaker': '요동치는 대지',
-        'Ein Sof': '아인 소프',
+        'Ein Sof(?! Ohr)': '아인 소프',
+        'Ein Sof Ohr': '아인 소프 오르',
         'Fiendish Rage': '마신의 분노',
         'Fiendish Wail': '마신의 탄식',
         'Force Field': '역장',

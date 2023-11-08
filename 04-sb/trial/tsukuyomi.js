@@ -1,34 +1,35 @@
 // Tsukuyomi Normal
 Options.Triggers.push({
+  id: 'CastrumFluminis',
   zoneId: ZoneId.CastrumFluminis,
   timelineFile: 'tsukuyomi.txt',
   triggers: [
     {
       id: 'Tsukuyomi Torment Unto Death',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2BE3', source: 'Tsukuyomi' }),
+      netRegex: { id: '2BE3', source: 'Tsukuyomi' },
       response: Responses.tankCleave(),
     },
     {
       id: 'Tsukuyomi Reprimand',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2BE2', source: 'Tsukuyomi', capture: false }),
+      netRegex: { id: '2BE2', source: 'Tsukuyomi', capture: false },
       response: Responses.aoe(),
     },
     {
       id: 'Tsukuyomi Midnight Haze',
       type: 'AddedCombatant',
-      netRegex: NetRegexes.addedCombatantFull({ npcNameId: '7230', capture: false }),
+      netRegex: { npcNameId: '7230', capture: false },
       response: Responses.killAdds(),
     },
     {
       id: 'Tsukuyomi Lead Of The Underworld',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2BE6', source: 'Tsukuyomi' }),
+      netRegex: { id: '2BE6', source: 'Tsukuyomi' },
       alertText: (data, matches, output) => {
         if (data.me === matches.target)
           return output.lineStackOnYou();
-        return output.lineStackOn({ player: data.ShortName(matches.target) });
+        return output.lineStackOn({ player: data.party.member(matches.target) });
       },
       outputStrings: {
         lineStackOnYou: {
@@ -52,19 +53,19 @@ Options.Triggers.push({
     {
       id: 'Tsukuyomi Nightbloom',
       type: 'StartsUsing',
-      netRegex: NetRegexes.startsUsing({ id: '2CB0', source: 'Tsukuyomi', capture: false }),
+      netRegex: { id: '2CB0', source: 'Tsukuyomi', capture: false },
       response: Responses.aoe(),
     },
     {
       id: 'Tsukuyomi Lunacy',
       type: 'HeadMarker',
-      netRegex: NetRegexes.headMarker({ id: '003E' }),
+      netRegex: { id: '003E' },
       response: Responses.stackMarkerOn(),
     },
     {
       id: 'Tsukuyomi Moonlit Debuff',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '602' }),
+      netRegex: { effectId: '602' },
       condition: (data, matches) => {
         if (matches.target !== data.me)
           return false;
@@ -85,7 +86,7 @@ Options.Triggers.push({
     {
       id: 'Tsukuyomi Moonshadowed Debuff',
       type: 'GainsEffect',
-      netRegex: NetRegexes.gainsEffect({ effectId: '603' }),
+      netRegex: { effectId: '603' },
       condition: (data, matches) => {
         if (matches.target !== data.me)
           return false;
@@ -108,7 +109,7 @@ Options.Triggers.push({
       // 2BFD is an unnamed ability that happens ~5 seconds before Dance Of The Dead.
       // Dance Of The Dead has no castbar.
       type: 'Ability',
-      netRegex: NetRegexes.ability({ id: '2BFD', source: 'Tsukuyomi', capture: false }),
+      netRegex: { id: '2BFD', source: 'Tsukuyomi', capture: false },
       response: Responses.aoe(),
     },
   ],
